@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+
+<head>
+    <title>Çözüm Burada</title>
+	<link href="{% static 'img/cozumburada-fav-icon.png' %}" rel="shortcut icon"/>
+	<meta charset="UTF-8">
+</head>
+
+
+<link rel="stylesheet" href="{% static 'css/reg.css' %}"/>
+
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="" method="post">
+            {% csrf_token %}
+			<h1>Hesap Oluştur</h1>
+			<input name="name" id="name" type="text" placeholder="Kullanıcı adı" />
+			<input name="email" id="email" type="email" placeholder="Email" />
+			<input name="password" id="password" type="password" placeholder="Şifre" />
+			<input name="password-again" id="password-again" type="password" placeholder="Şifre" />
+			<button>Kayıt Ol</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="" method="post">
+            {% csrf_token %}
+			<h1>Giriş</h1>
+			<input name="email" id="email" type="text" placeholder="Kullanıcı adı" />
+			<input name="password" id="password" type="password" placeholder="Şifre" />
+			<a href="password-forget.html">Şifremi Unuttum</a>
+			<button>Giriş Yap</button>
+            <span><a href="anasayfa">Anasayfa</a></span>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                            <li class="alert alert-danger">{{ message }}</li>
+                        {% else %}
+                            <li>{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Çözüm Burada Hoşgeldiniz</h1>
+				<p>Giriş yaparak çözülmesi gereken sorunlarınızı yazmaya başlayabilirsiniz</p>
+				<button class="ghost" id="signIn">Giriş Yap</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Merhaba, Çözüm Burada!</h1>
+				<p>Kayıt olarak sonra sorunlarınızı yazabilirsiniz</p>
+				<button class="ghost" id="signUp">Kayıt Ol</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{% static 'js/reg.js' %}"></script>
+</html>
