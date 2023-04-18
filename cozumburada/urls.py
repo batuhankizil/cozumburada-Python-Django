@@ -26,11 +26,14 @@ def complaint(request):
     return render(request, 'complaint.html')
 def password_forget(request):
     return render(request, 'password-forget.html')
+def complaints(request):
+    return render(request, 'complaints.html')
 
 urlpatterns = [
     path('', views.index, name='anasayfa'),
     path('anasayfa', views.index, name='anasayfa'),
     path('complaint', views.sikayet_yaz, name='complaint'),
+    path('complaints.html', views.complaints, name='complaints'),
     path('password-forget.html', password_forget),
     path('register.html', views.register_or_login, name='register_or_login'),
     path('logout/', views.logoutPage, name='logout'),

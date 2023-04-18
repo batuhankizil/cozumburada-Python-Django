@@ -52,9 +52,12 @@
             <nav class="main-menu">
                 <ul class="menu-list">
                     <li><a href="">Anasayfa</a></li>
-                    <li><a href="">Şikayetler</a></li>
+                    <li><a href="complaints.html">Şikayetler</a></li>
                     <li><a href="">{{ user.username }}</a>
                         <ul class="dropdown-menu">
+                          <li><a href="logout">Profili Düzenle</a></li>
+                          <li class="no-line"><a href="logout">Şikayetlerim</a></li>
+                          <li><a href="logout">Kaydedilenler</a></li>
                           <li><a href="logout">Çıkış Yap</a></li>
                         </ul>
                     </li>
@@ -386,60 +389,37 @@
 {#	<!-- Team section -->#}
 {##}
 {##}
-{#	<!-- Review section -->#}
-{#	<section class="review-section spad">#}
-{#		<div class="container">#}
-{#			<div class="row">#}
-{#				<div class="col-lg-8 push-8">#}
-{#					<img src="{% static 'img/quote.png' %}" alt="" class="quote mb-5">#}
-{#					<div class="review-text-slider owl-carousel">#}
-{#						<div class="review-text">#}
-{#							<p>"Şikayet konusu 1”</p>#}
-{#						</div>#}
-{#						<div class="review-text">#}
-{#							<p>"Şikayet konusu 2”</p>#}
-{#						</div>#}
-{#						<div class="review-text">#}
-{#							<p>"Şikayet konusu 3”</p>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-{#				<div class="col-lg-4 pr-0 pull-3">#}
-{#					<div class="review-meta-slider owl-carousel pt-5">#}
-{#						<div class="author-meta">#}
-{#							<div class="author-avatar set-bg" data-setbg="{% static 'img/review/1.jpg' %}"></div>#}
-{#							<div class="author-name">#}
-{#								<h4>Batuhan Kızıl</h4>#}
-{#								<p>Şikayet</p>#}
-{#							</div>#}
-{#						</div>#}
-{#						<div class="author-meta">#}
-{#							<div class="author-avatar set-bg" data-setbg="{% static 'img/review/2.jpg' %}"></div>#}
-{#							<div class="author-name">#}
-{#								<h4>Batuhan Kızıl</h4>#}
-{#								<p>Şikayet</p>#}
-{#							</div>#}
-{#						</div>#}
-{#						<div class="author-meta">#}
-{#							<div class="author-avatar set-bg" data-setbg="{% static 'img/review/3.jpg' %}"></div>#}
-{#							<div class="author-name">#}
-{#								<h4>Batuhan Kızıl</h4>#}
-{#								<p>Şikayet</p>#}
-{#							</div>#}
-{#						</div>#}
-{#                        <div class="author-meta">#}
-{#							<div class="author-avatar set-bg" data-setbg="{% static 'img/review/3.jpg' %}"></div>#}
-{#							<div class="author-name">#}
-{#								<h4>Batuhan Kızıl</h4>#}
-{#								<p>Şikayet</p>#}
-{#							</div>#}
-{#						</div>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
-{#	</section>#}
-{#	<!-- Review section end -->#}
+	<!-- Review section -->
+	<section class="review-section spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 push-8">
+					<img src="{% static 'img/quote.png' %}" alt="" class="quote mb-5">
+					<div class="review-text-slider owl-carousel">
+                        {% for complaint in complaints %}
+						<div class="review-text">
+							<p>{{ complaint.complaint }}</p>
+						</div>
+                        {% endfor %}
+					</div>
+				</div>
+				<div class="col-lg-4 pr-0 pull-3">
+					<div class="review-meta-slider owl-carousel pt-5">
+                        {% for complaint in complaints %}
+						<div class="author-meta">
+							<div class="author-avatar set-bg" data-setbg="{% static 'img/review/1.jpg' %}"></div>
+							<div class="author-name">
+								<h4>{{ complaint.user }}</h4>
+								<p>{{ complaint.title }}</p>
+							</div>
+						</div>
+                        {% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Review section end -->
 {##}
 {##}
 {#	<!-- Newsletter section -->#}

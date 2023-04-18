@@ -4,16 +4,20 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from cozumburada.models import Complaint
+
 
 # @login_required(login_url='register_or_login')
 def index(request):
     username = None
     user_count = User.objects.filter(is_superuser=False).count()
+    complaint = Complaint.objects.all()
     if request.user.is_authenticated:
         username = request.user.username
     context = {
         'username': username,
-        'user_count': user_count
+        'user_count': user_count,
+        'complaints': complaint
     }
     return render(request, 'index.html', context)
 
@@ -62,6 +66,20 @@ def sikayet_yaz(request):
     else:
         return redirect('register_or_login')
 
+
+# def complaints(request, complaint_id):
+#     complaint = Complaint.objects.get(id=complaint_id)
+#     context = {
+#         'complaint': complaint
+#     }
+#     return render(request, 'complaints.html', context)
+#
+# complaint = Complaint.objects.first()
+# print(complaint.title)
+
+def complaints(request):
+    complaint = Complaint.objects.all()
+    return render(request, 'complaints.html', {'complaints': complaint})
 
 
 def logoutPage(request):

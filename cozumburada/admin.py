@@ -1,4 +1,15 @@
 from django.contrib import admin
 from .models import Complaint
 
-admin.site.register(Complaint)
+
+class ComplaintAdmin(admin.ModelAdmin):
+    list_display = ['title', 'complaintDate']
+    list_display_links = ['title', 'complaintDate']
+    list_filter = ['complaintDate']
+    search_fields = ['title']
+
+    class Meta:
+        model = Complaint
+
+
+admin.site.register(Complaint, ComplaintAdmin)
