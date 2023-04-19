@@ -55,7 +55,7 @@
                     <li><a href="complaints.html">Şikayetler</a></li>
                     <li><a href="">{{ user.username }}</a>
                         <ul class="dropdown-menu">
-                          <li><a href="logout">Profili Düzenle</a></li>
+                          <li><a href="edit-profile.html">Profili Düzenle</a></li>
                           <li class="no-line"><a href="logout">Şikayetlerim</a></li>
                           <li><a href="logout">Kaydedilenler</a></li>
                           <li><a href="logout">Çıkış Yap</a></li>
@@ -247,21 +247,20 @@
 						<h2>{{ user_count }}</h2>
 						<p>Bireysel Üye</p>
                         <i class="ti-user"></i>
-{#						<i class="ti-basketball"></i>#}
 					</div>
 				</div>
 				<div class="col-sm">
 					<div class="fact">
-						<h2>12K</h2>
-						<p>Çözülen Şikayet</p>
-						<i class="ti-check"></i>
+						<h2>{{ complaint_count }}</h2>
+						<p>Şikayetler</p>
+						<i class="ti-pencil-alt"></i>
 					</div>
 				</div>
 				<div class="col-sm">
 					<div class="fact">
 						<h2>50</h2>
-						<p>Kayıtlı Marka</p>
-						<i class="ti-bookmark-alt"></i>
+						<p>Çözülen Şikayet</p>
+						<i class="ti-check"></i>
 					</div>
 				</div>
 			</div>

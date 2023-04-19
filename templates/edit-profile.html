@@ -1,10 +1,155 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+
+	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/themify-icons.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/animate.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}"/>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+
 </head>
 <body>
+
+<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+
+	<!-- Header section -->
+	<header class="header-section clearfix">
+		<div class="container-fluid">
+			<a href="anasayfa" class="site-logo">
+				<img src="{% static 'img/cozumburada-logo.png' %}" alt="">
+			</a>
+			<div class="responsive-bar"><i class="fa fa-bars"></i></div>
+			<a href="" class="user"><i class="fa fa-user"></i></a>
+
+        {% if user.is_authenticated %}
+			<a href="complaint" class="site-btn">+ Şikayet Yaz</a>
+        {% else %}
+            <a href="register.html" class="site-btn">+ Şikayet Yaz</a>
+        {% endif %}
+		{% if user.is_authenticated %}
+            <nav class="main-menu">
+                <ul class="menu-list">
+                    <li><a href="anasayfa">Anasayfa</a></li>
+                    <li><a href="complaints.html">Şikayetler</a></li>
+                    <li><a href="">
+                        <img src="{% static 'img/logo.png' %}" alt="Profil Resmi" class="profile-img">
+                        {{ user.username }}</a>
+                        <ul class="dropdown-menu">
+                          <li><a href="logout">Profili Düzenle</a></li>
+                          <li class="no-line"><a href="logout">Şikayetlerim</a></li>
+                          <li><a href="logout">Kaydedilenler</a></li>
+                          <li><a href="logout">Çıkış Yap</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        {% else %}
+            <nav class="main-menu">
+                <ul class="menu-list">
+                    <li><a href="anasayfa">Anasayfa</a></li>
+                    <li><a href="">Şikayetler</a></li>
+                    <li><a href="register.html">Giriş Yap / Kayıt Ol</a></li>
+                </ul>
+            </nav>
+        {% endif %}
+		</div>
+	</header>
+	<!-- Header section end -->
+
+
+	<!-- Page info section -->
+	<section class="page-info-section">
+		<div class="container">
+			<h2>Profili Düzenle</h2>
+			<div class="site-beradcamb">
+				<a href="anasayfa">Anasayfa</a>
+				<span><i class="fa fa-angle-right"></i> Profili Düzenle </span>
+			</div>
+		</div>
+	</section>
+	<!-- Page info end -->
+
+<div class="container">
+    <h3>Bilgilerinizi Güncelleyin</h3>
+  	<hr>
+	<div class="row">
+      <!-- left column -->
+      <div class="col-md-3">
+        <div class="text-center">
+          <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
+          <h6>Upload a different photo...</h6>
+
+          <input type="file" class="form-control">
+        </div>
+      </div>
+
+      <!-- edit form column -->
+      <div class="col-md-8 personal-info">
+
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Kullanıcı Adı :</label>
+            <div class="col-lg-8">
+              <input class="form-control" type="text" placeholder="{{ user.username }}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Ad :</label>
+            <div class="col-lg-8">
+              <input class="form-control" type="text" placeholder="{{ user.first_name }}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Soyad :</label>
+            <div class="col-lg-8">
+              <input class="form-control" type="text" placeholder="{{ user.last_name }}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Email:</label>
+            <div class="col-lg-8">
+              <input class="form-control" type="text" placeholder="{{ user.email }}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">Şifre :</label>
+            <div class="col-md-8">
+              <input class="form-control" type="password" placeholder="12345678">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">Şifre Tekrar :</label>
+            <div class="col-md-8">
+              <input class="form-control" type="password" placeholder="12345678">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+              <input type="button" class="btn btn-primary" value="Değiştir">
+              <span></span>
+              <input type="reset" class="btn btn-default" value="Vazgeç">
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+<hr>
+
+
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
 
 </body>
 </html>

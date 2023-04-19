@@ -28,6 +28,8 @@ def password_forget(request):
     return render(request, 'password-forget.html')
 def complaints(request):
     return render(request, 'complaints.html')
+def edit_profile(request):
+    return render(request, 'edit-profile.html')
 
 urlpatterns = [
     path('', views.index, name='anasayfa'),
@@ -35,6 +37,7 @@ urlpatterns = [
     path('complaint', views.sikayet_yaz, name='complaint'),
     path('complaints.html', views.complaints, name='complaints'),
     path('password-forget.html', password_forget),
+    path('edit-profile.html', edit_profile),
     path('register.html', views.register_or_login, name='register_or_login'),
     path('logout/', views.logoutPage, name='logout'),
     path('admin/', admin.site.urls),
