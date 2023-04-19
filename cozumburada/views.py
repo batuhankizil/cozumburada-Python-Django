@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .forms import ComplaintForm
 
 from cozumburada.models import Complaint
 
@@ -23,6 +24,7 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+
 def edit_profile(request):
     if request.user.is_authenticated:
         username = request.user.username
@@ -38,7 +40,6 @@ def edit_profile(request):
     return render(request, 'edit-profile.html', context)
 
 
-
 def register_or_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -49,7 +50,8 @@ def register_or_login(request):
             last_name = request.POST.get('last_name')
             password_again = request.POST.get('password-again')
             if password == password_again:
-                user = User.objects.create_user(username=name, email=email, password=password, first_name=first_name,last_name=last_name)
+                user = User.objects.create_user(username=name, email=email, password=password, first_name=first_name,
+                                                last_name=last_name)
                 user.save()
                 login(request, user)
                 return redirect('anasayfa')
@@ -73,28 +75,21 @@ def register_or_login(request):
     return render(request, 'register.html')
 
 
-# @login_required(login_url='register_or_login')
-# def shikayet_yaz(request):
-#     # burada şikayet yazma işlemleri yapılır
-#     return render(request, 'complaint.html')
-
 @login_required(login_url='register_or_login')
 def sikayet_yaz(request):
-    if request.user.is_authenticated:
-        return render(request, 'complaint.html')
+    if request.method == 'POST':
+        form = ComplaintForm(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Şikayetiniz alınmıştır. En kısa sürede incelenecektir.')
+            return redirect('anasayfa')
     else:
-        return redirect('register_or_login')
+        form = ComplaintForm(user=request.user)
 
-
-# def complaints(request, complaint_id):
-#     complaint = Complaint.objects.get(id=complaint_id)
-#     context = {
-#         'complaint': complaint
-#     }
-#     return render(request, 'complaints.html', context)
-#
-# complaint = Complaint.objects.first()
-# print(complaint.title)
+    context = {
+        'form': form
+    }
+    return render(request, 'complaint.html', context)
 
 def complaints(request):
     complaint = Complaint.objects.all()

@@ -109,7 +109,9 @@
 											<div class="comment-content">
                                                 {% for complaint in complaints %}
 												    <h5>{{ complaint.user }}<span>, {{ complaint.complaintDate}} </span></h5>
+												    <p>{{ complaint.title }}</p>
 												    <p>{{ complaint.complaint }}</p>
+                                                    <p>{{ complaint.user }}, {{ complaint.user_id }}</p>
 												    <a href="" class="c-btn">Yorum</a>
                                                 {% endfor %}
 											</div>
