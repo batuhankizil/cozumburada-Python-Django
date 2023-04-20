@@ -5,10 +5,32 @@
     <title>Çözüm Burada</title>
 	<link href="{% static 'img/cozumburada-fav-icon.png' %}" rel="shortcut icon"/>
 	<meta charset="UTF-8">
+
+    <link rel="stylesheet" href="{% static 'css/reg.css' %}"/>
+
 </head>
 
+<body>
+{% if messages %}
+  <div id="message-popup" class="container-fluid">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeMessagePopup()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  </div>
 
-<link rel="stylesheet" href="{% static 'css/reg.css' %}"/>
+  <script>
+    function closeMessagePopup() {
+      document.getElementById("message-popup").style.display = "none";
+    }
+  </script>
+{% endif %}
+
+
 
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
@@ -28,22 +50,14 @@
 		<form action="" method="post">
             {% csrf_token %}
 			<h1>Giriş</h1>
+
+
+
 			<input name="email" id="email" type="text" placeholder="Kullanıcı adı" />
 			<input name="password" id="password" type="password" placeholder="Şifre" />
 			<a href="password-forget.html">Şifremi Unuttum</a>
 			<button>Giriş Yap</button>
             <span><a href="anasayfa">Anasayfa</a></span>
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        {% if message.tags == 'error' %}
-                            <li class="alert alert-danger">{{ message }}</li>
-                        {% else %}
-                            <li>{{ message }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
 
 		</form>
 	</div>
@@ -64,4 +78,7 @@
 </div>
 
 <script src="{% static 'js/reg.js' %}"></script>
+<script src="{% static 'js/messages.js' %}"></script>
+
+</body>
 </html>

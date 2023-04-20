@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -30,8 +29,6 @@ ALLOWED_HOSTS = []
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-
 
 # Application definition
 
@@ -58,14 +55,13 @@ MIDDLEWARE = [
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-
 ROOT_URLCONF = 'cozumburada.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'
-                 , BASE_DIR / 'static']
+            , BASE_DIR / 'static']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -81,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cozumburada.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -91,7 +86,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -111,18 +105,35 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'tr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
+
+SESSION_COOKIE_AGE = 3600  # 1 saat
+SESSION_COOKIE_NAME = 'my_site_sessionid'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# settings.py
+
+# E-posta doğrulama için kullanılacak URL
+EMAIL_CONFIRMATION_URL = 'email-confirmation'
+
+# SMTP E-posta Gönderici Ayarları
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'cozumburada.cb@gmail.com' # Gönderen E-posta Adresi
+EMAIL_HOST_PASSWORD = 'Cb112233' # Gönderen E-posta Şifresi
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

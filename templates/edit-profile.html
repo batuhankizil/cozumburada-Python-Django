@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Çözüm Burada</title>
+	<meta charset="UTF-8">
+
+	<link href="{% static 'img/cozumburada-fav-icon.png' %}" rel="shortcut icon"/>
 
 	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
-
 	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}"/>
 	<link rel="stylesheet" href="{% static 'css/themify-icons.css' %}"/>
 	<link rel="stylesheet" href="{% static 'css/animate.css' %}"/>
@@ -94,54 +95,70 @@
 
       <!-- edit form column -->
       <div class="col-md-8 personal-info">
+          {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+          {% endif %}
 
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Kullanıcı Adı :</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" placeholder="{{ user.username }}">
+          <form class="form-horizontal" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Kullanıcı Adı :</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" name="username" value="{{ form.username.value }}">
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Ad :</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" placeholder="{{ user.first_name }}">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Ad :</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" name="first_name" value="{{ form.first_name.value }}">
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Soyad :</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" placeholder="{{ user.last_name }}">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Soyad :</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" name="last_name" value="{{ form.last_name.value }}">
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Email:</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" placeholder="{{ user.email }}">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Email:</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="email" name="email" value="{{ form.email.value }}">
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Şifre :</label>
-            <div class="col-md-8">
-              <input class="form-control" type="password" placeholder="********">
+            <div class="form-group">
+              <label class="col-md-3 control-label">Şifre :</label>
+              <div class="col-md-8">
+                <input class="form-control" type="password" name="password" placeholder="********">
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Şifre Tekrar :</label>
-            <div class="col-md-8">
-              <input class="form-control" type="password" placeholder="********">
+            <div class="form-group">
+              <label class="col-md-3 control-label">Şifre Tekrar :</label>
+              <div class="col-md-8">
+                <input class="form-control" type="password" name="password_confirm" placeholder="********">
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label"></label>
-            <div class="col-md-8">
-              <input type="button" class="btn btn-primary" value="Değiştir">
-              <span></span>
-              <input type="reset" class="btn btn-default" value="Vazgeç">
+            <div class="form-group">
+              <label class="col-md-3 control-label"></label>
+              <div class="col-md-8">
+                <input type="submit" class="btn btn-primary" value="Değiştir">
+                <input type="reset" class="btn btn-default" value="Vazgeç">
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+
   </div>
 </div>
 <hr>

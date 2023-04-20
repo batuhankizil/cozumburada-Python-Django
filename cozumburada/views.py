@@ -1,9 +1,10 @@
+from django.contrib.auth.forms import UserChangeForm
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import ComplaintForm
+from .forms import ComplaintForm, UserUpdateForm
 
 from cozumburada.models import Complaint
 
@@ -25,19 +26,19 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def edit_profile(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-        first_name = request.user.first_name
-        last_name = request.user.last_name
-        email = request.user.email
-    context = {
-        'username': username,
-        'first_name': first_name,
-        'last_name': last_name,
-        'email': email,
-    }
-    return render(request, 'edit-profile.html', context)
+# def edit_profile(request):
+#     if request.user.is_authenticated:
+#         username = request.user.username
+#         first_name = request.user.first_name
+#         last_name = request.user.last_name
+#         email = request.user.email
+#     context = {
+#         'username': username,
+#         'first_name': first_name,
+#         'last_name': last_name,
+#         'email': email,
+#     }
+#     return render(request, 'edit-profile.html', context)
 
 
 def register_or_login(request):
@@ -49,6 +50,10 @@ def register_or_login(request):
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             password_again = request.POST.get('password-again')
+            if not name or not email or not password or not first_name or not last_name or not password_again:
+                messages.error(request, 'Lütfen tüm alanları doldurunuz.')
+                return render(request, 'register.html')
+
             if password == password_again:
                 user = User.objects.create_user(username=name, email=email, password=password, first_name=first_name,
                                                 last_name=last_name)
@@ -82,7 +87,7 @@ def sikayet_yaz(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Şikayetiniz alınmıştır. En kısa sürede incelenecektir.')
-            return redirect('anasayfa')
+            return redirect('complaint')
     else:
         form = ComplaintForm(user=request.user)
 
@@ -91,9 +96,32 @@ def sikayet_yaz(request):
     }
     return render(request, 'complaint.html', context)
 
+
 def complaints(request):
     complaint = Complaint.objects.all()
     return render(request, 'complaints.html', {'complaints': complaint})
+
+
+
+
+def edit_profile(request):
+    if not request.user.is_authenticated:
+        return redirect('register_or_login')
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = UserUpdateForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Profil bilgileriniz başarıyla güncellendi.')
+
+        else:
+            form = UserUpdateForm(instance=request.user)
+        return render(request, 'edit-profile.html', {'form': form})
+    else:
+        return render(request, 'index.html')
+
+
 
 
 def logoutPage(request):
