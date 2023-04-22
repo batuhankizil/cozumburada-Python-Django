@@ -13,6 +13,7 @@ Including another URLconf
     1. Import to include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.shortcuts import render
 from cozumburada import views
@@ -41,7 +42,5 @@ urlpatterns = [
     path('register.html', views.register_or_login, name='register_or_login'),
     path('logout/', views.logoutPage, name='logout'),
     path('admin/', admin.site.urls),
-
 ]
-
 

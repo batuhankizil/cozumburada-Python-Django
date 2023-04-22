@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.template.context_processors import media
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -116,19 +118,9 @@ SESSION_COOKIE_AGE = 3600  # 1 saat
 SESSION_COOKIE_NAME = 'my_site_sessionid'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-# settings.py
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
-# E-posta doğrulama için kullanılacak URL
-EMAIL_CONFIRMATION_URL = 'email-confirmation'
-
-# SMTP E-posta Gönderici Ayarları
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'cozumburada.cb@gmail.com' # Gönderen E-posta Adresi
-EMAIL_HOST_PASSWORD = 'Cb112233' # Gönderen E-posta Şifresi
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 USE_I18N = True

@@ -26,21 +26,6 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-# def edit_profile(request):
-#     if request.user.is_authenticated:
-#         username = request.user.username
-#         first_name = request.user.first_name
-#         last_name = request.user.last_name
-#         email = request.user.email
-#     context = {
-#         'username': username,
-#         'first_name': first_name,
-#         'last_name': last_name,
-#         'email': email,
-#     }
-#     return render(request, 'edit-profile.html', context)
-
-
 def register_or_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -98,10 +83,9 @@ def sikayet_yaz(request):
 
 
 def complaints(request):
-    complaint = Complaint.objects.all()
-    return render(request, 'complaints.html', {'complaints': complaint})
-
-
+    complaints = Complaint.objects.all()
+    complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
+    return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted})
 
 
 def edit_profile(request):
@@ -111,6 +95,7 @@ def edit_profile(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = UserUpdateForm(request.POST, instance=request.user)
+
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Profil bilgileriniz başarıyla güncellendi.')

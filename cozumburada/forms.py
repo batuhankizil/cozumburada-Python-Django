@@ -1,7 +1,3 @@
-from django import forms
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.models import User
 from .models import Complaint
 
 from django import forms
@@ -54,5 +50,3 @@ class ComplaintForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
-
-

@@ -110,7 +110,7 @@
 										<div class="comment">
 											<div class="comment-avator set-bg" data-setbg="img/blog/comment/1.jpg"></div>
 											<div class="comment-content">
-                                                {% for complaint in complaints %}
+                                                {% for complaint in complaints_sorted %}
 												    <h5>{{ complaint.user }}<span>, {{ complaint.complaintDate}} </span></h5>
 												    <p>{{ complaint.title }}</p>
 												    <p>{{ complaint.complaint }}</p>
