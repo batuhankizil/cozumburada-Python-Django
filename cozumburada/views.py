@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import ComplaintForm, UserUpdateForm
+from .forms import ComplaintForm, UserUpdateForm, ProfileForm
 
-from cozumburada.models import Complaint
+from cozumburada.models import Complaint, Profile
 
 
 # @login_required(login_url='register_or_login')
@@ -53,6 +53,11 @@ def register_or_login(request):
         else:
             email = request.POST.get('email')
             password = request.POST.get('password')
+
+            if not email and not password:
+                messages.error(request, 'Lütfen bilgilerinizi girin.')
+                return redirect('register_or_login')
+
             user = authenticate(request, username=email, password=password)
             print(email, password)
             if user is not None:
@@ -95,18 +100,37 @@ def edit_profile(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = UserUpdateForm(request.POST, instance=request.user)
+            formp = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
-            if form.is_valid():
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            name = request.POST.get('name')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            password_again = request.POST.get('password_again')
+
+            if not password and not password_again:
+                messages.error(request, 'Lütfen şifrenizi giriniz.')
+                return redirect('edit_profile')
+            elif not password or not password_again:
+                messages.error(request, 'Her iki şifreyi de giriniz.')
+                return redirect('edit_profile')
+            elif password != password_again:
+                messages.error(request, 'Girilen şifreler birbirleriyle uyuşmuyor.')
+
+            elif form.is_valid() and formp.is_valid():
                 form.save()
+                profile = formp.save(commit=False)
+                if request.FILES.get('profile'):
+                    profile.profile_picture = request.FILES.get('profile')
+                profile.save()
                 messages.success(request, 'Profil bilgileriniz başarıyla güncellendi.')
-
         else:
             form = UserUpdateForm(instance=request.user)
-        return render(request, 'edit-profile.html', {'form': form})
+            formp = ProfileForm(instance=request.user.profile)
+        return render(request, 'edit-profile.html', {'form': form, 'formp': formp})
     else:
         return render(request, 'index.html')
-
-
 
 
 def logoutPage(request):

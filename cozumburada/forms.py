@@ -4,6 +4,8 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 
+from .models import Profile
+
 
 class UserUpdateForm(UserChangeForm):
     email = forms.EmailField(required=True)
@@ -50,3 +52,12 @@ class ComplaintForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class ProfileForm(forms.ModelForm):
+
+    image = forms.ImageField(label="Profile Picture")
+
+    class Meta:
+        model = Profile
+        fields = ['image']

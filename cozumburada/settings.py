@@ -118,9 +118,8 @@ SESSION_COOKIE_AGE = 3600  # 1 saat
 SESSION_COOKIE_NAME = 'my_site_sessionid'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
+MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
 
 
 USE_I18N = True

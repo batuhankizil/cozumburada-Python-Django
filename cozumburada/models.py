@@ -23,3 +23,11 @@ complaints = Complaint.objects.all()
 
 for complaint in complaints:
     print(complaint)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/', default='default.png', null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username

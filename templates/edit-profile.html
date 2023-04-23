@@ -41,13 +41,13 @@
                 <ul class="menu-list">
                     <li><a href="anasayfa">Anasayfa</a></li>
                     <li><a href="complaints.html">Şikayetler</a></li>
-                    <li><a href="">{% if request.user.profile.image %}
+                    <li><a href="">
+                        {{ user.username }}</a>
+                        {% if request.user.profile.image %}
                           <img src="{{ request.user.profile.image.url }}" alt="Profil Resmi" class="profile-img">
                         {% endif %}
-
-                        {{ user.username }}</a>
                         <ul class="dropdown-menu">
-                          <li><a href="logout">Profili Düzenle</a></li>
+                          <li><a href="edit-profile.html">Profili Düzenle</a></li>
                           <li class="no-line"><a href="logout">Şikayetlerim</a></li>
                           <li><a href="logout">Kaydedilenler</a></li>
                           <li><a href="logout">Çıkış Yap</a></li>
@@ -86,18 +86,10 @@
   	<hr>
 	<div class="row">
       <!-- left column -->
-      <div class="col-md-3">
-        <div class="text-center">
-          <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
-          <h6>Upload a different photo...</h6>
 
-          <input type="file" class="form-control" name="image">
-
-        </div>
-      </div>
 
       <!-- edit form column -->
-      <div class="col-md-8 personal-info">
+      <div class="col-md-12 personal-info mx-auto">
           {% if messages %}
             <div class="messages">
                 {% for message in messages %}
@@ -114,54 +106,63 @@
             </div>
           {% endif %}
 
-          <form class="form-horizontal" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-              <label class="col-lg-3 control-label">Kullanıcı Adı :</label>
-              <div class="col-lg-8">
-                <input class="form-control" type="text" name="username" value="{{ form.username.value }}">
+         <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-3">
+              <div class="text-center">
+                <img src="{{ request.user.profile.image.url }}" alt="Profil Resmi" class="avatar img-circle">
+                <span class="profile-text">Profil Resmi Yükle</span>
+                <input type="file" class="form-control" name="image" >
               </div>
             </div>
-            <div class="form-group">
-              <label class="col-lg-3 control-label">Ad :</label>
-              <div class="col-lg-8">
-                <input class="form-control" type="text" name="first_name" value="{{ form.first_name.value }}">
+            <div class="col-md-9">
+              <div class="form-group">
+                <label class="col-lg-3 control-label" for="username">Kullanıcı Adı :</label>
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="username" value="{{ form.username.value }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label" for="first_name">Ad :</label>
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="first_name" value="{{ form.first_name.value }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label" for="last_name">Soyad :</label>
+                <div class="col-lg-8">
+                  <input class="form-control" type="text" name="last_name" value="{{ form.last_name.value }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label" for="email">Email:</label>
+                <div class="col-lg-8">
+                  <input class="form-control" type="email" name="email" value="{{ form.email.value }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="password">Şifre :</label>
+                <div class="col-md-8">
+                  <input class="form-control" type="password" name="password" placeholder="********">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="password_again">Şifre Tekrar :</label>
+                <div class="col-md-8">
+                  <input class="form-control" type="password" name="password_again" placeholder="********">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-8 col-md-offset-3">
+                  <input type="submit" class="btn btn-primary" value="Değiştir">
+                  <input type="reset" class="btn btn-default" value="Vazgeç">
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <label class="col-lg-3 control-label">Soyad :</label>
-              <div class="col-lg-8">
-                <input class="form-control" type="text" name="last_name" value="{{ form.last_name.value }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-3 control-label">Email:</label>
-              <div class="col-lg-8">
-                <input class="form-control" type="email" name="email" value="{{ form.email.value }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-md-3 control-label">Şifre :</label>
-              <div class="col-md-8">
-                <input class="form-control" type="password" name="password" placeholder="********">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-md-3 control-label">Şifre Tekrar :</label>
-              <div class="col-md-8">
-                <input class="form-control" type="password" name="password_confirm" placeholder="********">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-md-3 control-label"></label>
-              <div class="col-md-8">
-                <input type="submit" class="btn btn-primary" value="Değiştir">
-                <input type="reset" class="btn btn-default" value="Vazgeç">
-              </div>
-            </div>
-          </form>
+          </div>
+        </form>
         </div>
-
   </div>
 </div>
 <hr>

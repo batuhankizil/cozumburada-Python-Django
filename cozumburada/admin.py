@@ -1,8 +1,15 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from .models import Complaint, Profile
 
-from .models import Complaint
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'image']
+
+    class Meta:
+        model = Profile
+
+
+admin.site.register(Profile, ProfileAdmin)
 
 
 class ComplaintAdmin(admin.ModelAdmin):
@@ -16,4 +23,3 @@ class ComplaintAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Complaint, ComplaintAdmin)
-

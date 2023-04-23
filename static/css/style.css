@@ -76,6 +76,20 @@ img {
 	max-width: 100%;
 }
 
+.profile-text {
+	color: #0c5460;
+}
+
+.form-group label[for="username"],
+.form-group label[for="first_name"],
+.form-group label[for="last_name"],
+.form-group label[for="email"],
+.form-group label[for="password"],
+.form-group label[for="password_again"] {
+  font-weight: bold;
+}
+
+
 input:focus,
 select:focus,
 button:focus,
@@ -330,8 +344,8 @@ ol {
 }
 
 .profile-img {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     border: 1px solid #ccc;
     position: absolute;
@@ -352,7 +366,7 @@ ol {
 .menu-list li {
 	display: inline-block;
 	position: relative;
-	padding-left: 22px;
+	padding-left: 50px;
 }
 
 .menu-list li:hover .dropdown-menu {
@@ -1911,4 +1925,5 @@ ol {
 	.comment .comment-content {
 		padding-left: 0;
 	}
+
 }

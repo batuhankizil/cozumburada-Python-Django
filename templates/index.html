@@ -51,9 +51,13 @@
 		{% if user.is_authenticated %}
             <nav class="main-menu">
                 <ul class="menu-list">
-                    <li><a href="">Anasayfa</a></li>
+                    <li><a href="anasayfa">Anasayfa</a></li>
                     <li><a href="complaints.html">Şikayetler</a></li>
-                    <li><a href="">{{ user.username }}</a>
+                    <li><a href="">
+                        {{ user.username }}</a>
+                        {% if request.user.profile.image %}
+                          <img src="{{ request.user.profile.image.url }}" alt="Profil Resmi" class="profile-img">
+                        {% endif %}
                         <ul class="dropdown-menu">
                           <li><a href="edit-profile.html">Profili Düzenle</a></li>
                           <li class="no-line"><a href="logout">Şikayetlerim</a></li>
@@ -66,7 +70,7 @@
         {% else %}
             <nav class="main-menu">
                 <ul class="menu-list">
-                    <li><a href="">Anasayfa</a></li>
+                    <li><a href="anasayfa">Anasayfa</a></li>
                     <li><a href="">Şikayetler</a></li>
                     <li><a href="register.html">Giriş Yap / Kayıt Ol</a></li>
                 </ul>
