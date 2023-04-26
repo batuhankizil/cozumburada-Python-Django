@@ -111,11 +111,12 @@
 											<div class="comment-avator set-bg" data-setbg="img/blog/comment/1.jpg"></div>
 											<div class="comment-content">
                                                 {% for complaint in complaints_sorted %}
-												    <h5>{{ complaint.user }}<span>, {{ complaint.complaintDate}} </span></h5>
-												    <p>{{ complaint.title }}</p>
+
+												    <h5> <img src="{{ complaint.user.profile.image.url }}" height="80px"> {{ complaint.user }}<span>, {{ complaint.complaintDate}} </span></h5>
+												    <h3>{{ complaint.title }}</h3>
 												    <p>{{ complaint.complaint }}</p>
-                                                    <p>{{ complaint.user }}, {{ complaint.user_id }}</p>
 												    <a href="" class="c-btn">Yorum</a>
+
                                                 {% endfor %}
 											</div>
 										</div>

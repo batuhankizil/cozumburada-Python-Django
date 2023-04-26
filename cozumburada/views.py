@@ -8,6 +8,8 @@ from .forms import ComplaintForm, UserUpdateForm, ProfileForm
 
 from cozumburada.models import Complaint, Profile
 
+import re
+
 
 # @login_required(login_url='register_or_login')
 def index(request):
@@ -26,6 +28,18 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+
+def is_valid_email(email):
+    regex = r"[^@]+@[^@]+\.[^@]+"
+    return re.match(regex, email) is not None
+
+email = "example@example.com"
+if is_valid_email(email):
+    print(f"{email} is a valid email address")
+else:
+    print(f"{email} is not a valid email address")
+
+
 def register_or_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -37,6 +51,10 @@ def register_or_login(request):
             password_again = request.POST.get('password-again')
             if not name or not email or not password or not first_name or not last_name or not password_again:
                 messages.error(request, 'Lütfen tüm alanları doldurunuz.')
+                return render(request, 'register.html')
+
+            if not is_valid_email(email):
+                messages.error(request, 'Geçersiz bir email adresi girdiniz.')
                 return render(request, 'register.html')
 
             if password == password_again:

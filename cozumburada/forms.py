@@ -55,7 +55,6 @@ class ComplaintForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
-
     image = forms.ImageField(label="Profile Picture")
 
     class Meta:
