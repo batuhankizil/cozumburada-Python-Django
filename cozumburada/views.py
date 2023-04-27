@@ -1,14 +1,23 @@
 from django.contrib.auth.forms import UserChangeForm
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import ComplaintForm, UserUpdateForm, ProfileForm
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+from .forms import ComplaintForm, UserUpdateForm, ProfileForm, SignupForm
 
 from cozumburada.models import Complaint, Profile
 
 import re
+
+from .tokens import account_activation_token
+
 
 
 # @login_required(login_url='register_or_login')
@@ -28,10 +37,10 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-
 def is_valid_email(email):
     regex = r"[^@]+@[^@]+\.[^@]+"
     return re.match(regex, email) is not None
+
 
 email = "example@example.com"
 if is_valid_email(email):
@@ -40,14 +49,16 @@ else:
     print(f"{email} is not a valid email address")
 
 
+
 def register_or_login(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        form = SignupForm(request.POST)
         if 'name' in request.POST:
             name = request.POST.get('name')
+            email = request.POST.get('email')
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
+            password = request.POST.get('password')
             password_again = request.POST.get('password-again')
             if not name or not email or not password or not first_name or not last_name or not password_again:
                 messages.error(request, 'Lütfen tüm alanları doldurunuz.')
@@ -60,14 +71,29 @@ def register_or_login(request):
             if password == password_again:
                 user = User.objects.create_user(username=name, email=email, password=password, first_name=first_name,
                                                 last_name=last_name)
+                user.is_active = False
                 user.save()
-                login(request, user)
-                return redirect('anasayfa')
+
+                current_site = get_current_site(request)
+                mail_subject = 'Activation link has been sent to your email id'
+                message = render_to_string('acc_active_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': account_activation_token.make_token(user),
+                })
+                to_email = email
+                email = EmailMessage(
+                    mail_subject, message, to=[to_email]
+                )
+                email.send()
+                return render(request, 'Email.html',
+                              {'msg': 'Please confirm your email address to complete the registration',
+                               'login_page': True})
+
             else:
-                # Burada şifrelerin eşleşmediğini belirten bir hata mesajı gösterilebilir.
                 messages.error(request, 'Şifreler eşleşmiyor.')
                 return render(request, 'register.html')
-                pass
         else:
             email = request.POST.get('email')
             password = request.POST.get('password')
@@ -77,15 +103,37 @@ def register_or_login(request):
                 return redirect('register_or_login')
 
             user = authenticate(request, username=email, password=password)
-            print(email, password)
             if user is not None:
                 login(request, user)
                 return redirect('anasayfa')
+
+            if user is not activate:
+                messages.error(request, 'Emailinizi doğrulayın.', extra_tags='danger')
+
             else:
-                # Burada giriş başarısız olduğunda gösterilecek bir hata mesajı gösterilebilir.
                 messages.error(request, 'Hatalı kullanıcı adı veya şifre.', extra_tags='danger')
                 pass
-    return render(request, 'register.html')
+    else:
+        form = SignupForm()
+    return render(request, 'register.html', {'form': form})
+
+
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)  # Kullanıcıyı giriş yaptır
+        return render(request, 'Email.html', {'msg': 'Thank you for your email confirmation. Now you can login your account.'})
+    else:
+        return render(request, 'Email.html', {'msg': 'Activation link is invalid!'})
+
 
 
 @login_required(login_url='register_or_login')

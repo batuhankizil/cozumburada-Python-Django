@@ -6,6 +6,23 @@ from django.contrib.auth.models import User
 
 from .models import Profile
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+
+from django.contrib.auth.forms import UserCreationForm
+
+
+
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(help_text=_('Required. Enter a valid email address.'))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'password')
+
+
 
 class UserUpdateForm(UserChangeForm):
     email = forms.EmailField(required=True)

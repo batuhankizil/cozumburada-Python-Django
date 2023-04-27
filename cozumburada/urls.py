@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.shortcuts import render
 from cozumburada import views
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+
+from cozumburada.views import activate
 
 
 #
@@ -48,5 +50,8 @@ urlpatterns = [
     path('edit-profile.html', views.edit_profile, name='edit_profile'),
     path('register.html', views.register_or_login, name='register_or_login'),
     path('logout/', views.logoutPage, name='logout'),
+    path('activate<uidb64>/<token>/', activate, name='activate'),
     path('admin/', admin.site.urls),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

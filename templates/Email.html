@@ -1,0 +1,6 @@
+{% if msg %}
+    <p>{{ msg }}</p>
+    {% if login_page %}
+        <a href="{% url 'register_or_login' %}" class="btn btn-primary">Continue to Login Page</a>
+    {% endif %}
+{% endif %}
