@@ -77,6 +77,7 @@ class ComplaintForm(forms.ModelForm):
         return instance
 
 
+
 class ProfileForm(forms.ModelForm):
     image = forms.ImageField(label="Profile Picture")
 
