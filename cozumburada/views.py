@@ -1,5 +1,9 @@
+import os
+
+from django.conf import settings
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
@@ -145,12 +149,27 @@ def activate(request, uidb64, token):
 
 
 
-@login_required(login_url='register_or_login')
 def sikayet_yaz(request):
     if request.method == 'POST':
         form = ComplaintForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
+            complaint = form.save()
+
+            if request.FILES.get('image'):
+                complaint.image = request.FILES.get('image')
+            complaint.save()
+
+            # Resimlerin kaydedileceği dizinin yolu
+            save_path = os.path.join(settings.MEDIA_ROOT, 'complaints', str(complaint.id))
+
+            # Resimlerin kaydedileceği dizini oluştur
+            os.makedirs(save_path, exist_ok=True)
+
+            # Formdan gelen resimleri tek tek kaydet
+            for image in request.FILES.getlist('image'):
+                fs = FileSystemStorage(location=save_path)
+                filename = fs.save(image.name, image)
+
             messages.success(request, 'Şikayetiniz alınmıştır. En kısa sürede incelenecektir.')
             return redirect('complaint')
     else:
@@ -160,6 +179,7 @@ def sikayet_yaz(request):
         'form': form
     }
     return render(request, 'complaint.html', context)
+
 
 
 def complaints(request):

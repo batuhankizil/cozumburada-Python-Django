@@ -60,7 +60,8 @@ class ComplaintForm(forms.ModelForm):
         model = Complaint
         fields = [
             'title',
-            'complaint'
+            'complaint',
+            'image'
         ]
 
     def __init__(self, *args, **kwargs):

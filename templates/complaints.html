@@ -115,6 +115,12 @@
 												    <h5> <img src="{{ complaint.user.profile.image.url }}" height="80px"> {{ complaint.user }}<span>, {{ complaint.complaintDate}} </span></h5>
 												    <h3>{{ complaint.title }}</h3>
 												    <p>{{ complaint.complaint }}</p>
+
+                                                    {% if complaint.image %}
+                                                    <img src="{{ complaint.image.url }}" height="100px"> <br>
+                                                    {% endif %}
+
+
 												    <a href="" class="c-btn">Yorum</a>
 
                                                 {% endfor %}
