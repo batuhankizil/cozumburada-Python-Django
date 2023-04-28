@@ -64,6 +64,14 @@ def register_or_login(request):
                 messages.error(request, 'Lütfen tüm alanları doldurunuz.')
                 return render(request, 'register.html')
 
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email adresi kullanılıyor.')
+                return render(request, 'register.html')
+
+            if User.objects.filter(username=name).exists():
+                messages.error(request, 'Kullanıcı adı kullanılıyor.')
+                return render(request, 'register.html')
+
             if not is_valid_email(email):
                 messages.error(request, 'Geçersiz bir email adresi girdiniz.')
                 return render(request, 'register.html')
@@ -103,6 +111,7 @@ def register_or_login(request):
                 return redirect('register_or_login')
 
             user = authenticate(request, username=email, password=password)
+
             if user is not None:
                 login(request, user)
                 return redirect('anasayfa')

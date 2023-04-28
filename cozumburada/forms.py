@@ -22,6 +22,11 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(u'Email already exists')
+        return email
 
 
 class UserUpdateForm(UserChangeForm):
