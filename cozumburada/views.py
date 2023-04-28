@@ -83,7 +83,7 @@ def register_or_login(request):
                 user.save()
 
                 current_site = get_current_site(request)
-                mail_subject = 'Activation link has been sent to your email id'
+                mail_subject = 'Hesabınızı Doğrulayın - Çözüm Burada'
                 message = render_to_string('acc_active_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -138,10 +138,10 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)  # Kullanıcıyı giriş yaptır
-        return render(request, 'Email.html', {'msg': 'Thank you for your email confirmation. Now you can login your account.'})
+        login(request, user)
+        return render(request, 'Email.html', {'msg': 'Email adresinizi doğruladınız. Giriş yaparak şikayet yazmaya başlayabilirsiniz'})
     else:
-        return render(request, 'Email.html', {'msg': 'Activation link is invalid!'})
+        return render(request, 'Email.html', {'msg': 'Hesap doğrulama bağlantısı artık aktif değil.'})
 
 
 

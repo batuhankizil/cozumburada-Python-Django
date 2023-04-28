@@ -1,6 +1,24 @@
+{% load static %}
 {% if msg %}
     <p>{{ msg }}</p>
     {% if login_page %}
-        <a href="{% url 'register_or_login' %}" class="btn btn-primary">Continue to Login Page</a>
+
+        <html>
+        <head>
+            <title>Çözüm Burada</title>
+            <link href="{% static 'img/cozumburada-fav-icon.png' %}" rel="shortcut icon"/>
+            <meta charset="UTF-8">
+
+            <link rel="stylesheet" href="{% static 'css/email-verify.css' %}"/>
+
+        </head>
+        <body>
+            <div class="container">
+                <h1>Çözüm Buradaya Hoşgeldiniz</h1>
+                <span>Hesap doğrulamanız email adresinize gönderilmiştir. <br> Email adresinizi onayladıktan sonra şikayetlerinizi yazabilirsiniz. </span>
+                <a href="{% url 'register_or_login' %}" class="btn btn-primary"><button>Giriş Yap</button></a>
+            </div>
+        </body>
+        </html>
     {% endif %}
 {% endif %}
