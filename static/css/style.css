@@ -72,6 +72,79 @@ p {
 	line-height: 1.6;
 }
 
+.p-complaint-user {
+	color: #FF6F3C;
+	text-transform: capitalize;
+	margin-top: 10px;
+	margin-bottom: -2px;
+}
+
+.p-complaint-title {
+	color: #1b1b1b;
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+.p-complaint-date {
+	color: #75849a;
+	font-size: 10px;
+}
+
+.p-complaint {
+	color: #1b1b1b;
+}
+
+.zoomable {
+  width: 100px; /* Resmin orijinal boyutunu girin */
+  transition: all 0.3s ease-in-out;
+	border-radius: 20px;
+}
+
+.modal {
+  display: none; /* Varsayılan olarak gizli */
+  position: fixed; /* Sabit bir konumda */
+  z-index: 1; /* Diğer tüm öğelerin önünde */
+  left: 0;
+  top: 0;
+  width: 100%; /* Tüm genişlik */
+  height: 100%; /* Tüm yükseklik */
+  overflow: auto; /* Kaydırma çubuklarını göster */
+  background-color: rgba(0,0,0,0.9); /* Kara arka plan, transparan */
+}
+
+/* Modal içeriği */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 80%;
+  max-height: 80%;
+}
+
+/* Kapatma butonu */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.zoomable:hover {
+  transform: scale(2.1); /* Resmi yaklaştırmak için oran girin */
+  cursor: pointer;
+}
+
+
 img {
 	max-width: 100%;
 }

@@ -396,28 +396,24 @@
 	<section class="review-section spad">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-8 push-8">
+				<div class="col-lg-8 push-5">
 					<img src="{% static 'img/quote.png' %}" alt="" class="quote mb-5">
 					<div class="review-text-slider owl-carousel">
                         {% for complaint in complaints %}
-						<div class="review-text">
-							<p>{{ complaint.complaint }}</p>
-						</div>
+                            <div class="review-item">
+                                <div class="review-profile">
+                                    <img src="{{ complaint.user.profile.image.url }}" alt="Profile Picture" height="50px" width="100px">
+                                    <p>{{ complaint.user }}</p>
+                                </div>
+                                <div class="review-text">
+                                    <h2>{{ complaint.title }}</h2>
+                                    <p>{{ complaint.complaint }}</p>
+                                </div>
+                            </div>
                         {% endfor %}
+
 					</div>
 				</div>
-				<div class="col-lg-4 pr-0 pull-3">
-					<div class="review-meta-slider owl-carousel pt-5">
-                        {% for complaint in complaints %}
-						<div class="author-meta">
-							<div class="author-avatar set-bg" data-setbg="{% static 'img/review/1.jpg' %}"></div>
-							<div class="author-name">
-								<h4>{{ complaint.user }}</h4>
-								<p>{{ complaint.title }}</p>
-							</div>
-						</div>
-                        {% endfor %}
-					</div>
 				</div>
 			</div>
 		</div>

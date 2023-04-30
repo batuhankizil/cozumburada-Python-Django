@@ -183,10 +183,13 @@ def sikayet_yaz(request):
 
 
 
+
+
 def complaints(request):
     complaints = Complaint.objects.all()
     complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
-    return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted})
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
 
 
 def edit_profile(request):

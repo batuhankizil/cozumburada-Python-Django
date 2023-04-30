@@ -94,69 +94,59 @@
 
 
 	<!-- Blog section -->
-	<section class="single-blog-page spad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="blog-item bi-feature">
-						<figure class="blog-thumb">
-							<img src="img/blog/2.jpg" alt="">
-						</figure>
-						<div class="blog-text">
-							<div class="comment-area">
-								<h4>Şikayetler</h4>
-								<ul class="comment-list">
-									<li>
-										<div class="comment">
-											<div class="comment-avator set-bg" data-setbg="img/blog/comment/1.jpg"></div>
-											<div class="comment-content">
-                                                {% for complaint in complaints_sorted %}
+    <section class="gradient-custom">
+  <div class="container my-9 py-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+          <div class="card-body p-4">
+            <h4 class="text-center mb-4 pb-2">Şikayetler</h4>
 
-												    <h5> <img src="{{ complaint.user.profile.image.url }}" height="80px"> {{ complaint.user }}<span>, {{ complaint.complaintDate}} </span></h5>
-												    <h3>{{ complaint.title }}</h3>
-												    <p>{{ complaint.complaint }}</p>
+            <div class="row">
+              <div class="col">
+                  {% for complaint in complaints_sorted %}
+                    <div class="d-flex flex-start">
+                      <img class="rounded-circle shadow-1-strong mr-4"
+                        src="{{ complaint.user.profile.image.url }}" width="80"
+                        height="80" />
+                      <div class="flex-grow-1 flex-shrink-1">
+                        <div>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="p-complaint-user">
+                              {{ complaint.user }}
+                            </p>
+                          </div>
 
-                                                    {% if complaint.image %}
-                                                    <img src="{{ complaint.image.url }}" height="100px"> <br>
-                                                    {% endif %}
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="p-complaint-title">
+                              {{ complaint.title }}
+                            </p>
+                          </div>
 
-
-												    <a href="" class="c-btn">Yorum</a>
-
-                                                {% endfor %}
-											</div>
-										</div>
-										<ul class="replay-comment-list">
-											<li>
-												<div class="comment">
-													<div class="comment-avator set-bg" data-setbg="img/blog/comment/2.jpg"></div>
-													<div class="comment-content">
-														<h5>{{ complaint.title }}<span>, 24 Mar 2023</span></h5>
-														<p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore.</p>
-														<a href="" class="c-btn">Yorum</a>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li>
-										<div class="comment">
-											<div class="comment-avator set-bg" data-setbg="img/blog/comment/3.jpg"></div>
-											<div class="comment-content">
-												<h5>{{ complaint.title }}<span>, 24 Mar 2023</span></h5>
-												<p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam.</p>
-												<a href="" class="c-btn">Yorum</a>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+                          <p class="p-complaint">
+                            {{ complaint.complaint }}
+                          </p>
+                            {% if complaint.image %}
+                                <img class="zoomable" src="{{ complaint.image.url }}" height="100px" onclick="openModal(this)"> <br>
+                                <div id="myModal" class="modal">
+                                  <span class="close" onclick="closeModal()">&times;</span>
+                                  <img class="modal-content" id="img01">
+                                </div>
+                            {% endif %}
+                        <span class="p-complaint-date">{{ complaint.complaintDate }}</span> <br>
+                        <a href="" class="c-btn">Yorum</a>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 	<!-- Blog section end -->
 
 
@@ -180,25 +170,14 @@
 					<span>
                  &copy; <script>document.write(new Date().getFullYear());</script> Çözüm Burada. Her hakkı saklıdır.</a> </span>
 				</div>
-				<div class="col-md-6 col-lg-2 offset-lg-1 footer-widget">
+				<div class="col-md-6 col-lg-5 offset-lg-1 footer-widget">
 					<h5 class="widget-title">Şikayetler</h5>
-					<ul>
-						<li><a href="#">Şikayet 1</a></li>
-						<li><a href="#">Şikayet 2</a></li>
-						<li><a href="#">Şikayet 3</a></li>
-						<li><a href="#">Şikayet 4</a></li>
-						<li><a href="#">Şikayet 5</a></li>
-					</ul>
-				</div>
-				<div class="col-md-6 col-lg-2 offset-lg-1 footer-widget">
-					<h5 class="widget-title">Konular</h5>
-					<ul>
-						<li><a href="#">Telefonum bozuldu</a></li>
-						<li><a href="#">Konu 2</a></li>
-						<li><a href="#">Konu 3</a></li>
-						<li><a href="#">Konu 4</a></li>
-						<li><a href="#">Konu 5</a></li>
-					</ul>
+
+                    {% for complaint in complaints_footer %}
+                        <ul>
+                            <li><a href="#">{{ complaint.title }}</a></li>
+                        </ul>
+                    {% endfor %}
 				</div>
 				<div class="col-md-6 col-lg-3 footer-widget pl-lg-5 pl-3">
 					<h5 class="widget-title">Çok Arananlar</h5>
@@ -220,5 +199,29 @@
 	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+    function openModal(img) {
+      // Modalı göster
+      var modal = document.getElementById("myModal");
+      modal.style.display = "block";
+
+      // Modal içeriğini ayarla
+      var modalImg = document.getElementById("img01");
+      modalImg.src = img.src;
+    }
+
+    function closeModal() {
+      // Modalı gizle
+      var modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    }
+    </script>
+
+
+
+
+
+
 </body>
 </html>
