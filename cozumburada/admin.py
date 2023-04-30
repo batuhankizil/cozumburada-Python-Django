@@ -18,7 +18,6 @@ class ComplaintAdmin(admin.ModelAdmin):
     list_filter = ['complaintDate']
     search_fields = ['title']
 
-
     class Meta:
         model = Complaint
 

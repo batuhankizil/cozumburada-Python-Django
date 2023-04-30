@@ -159,6 +159,7 @@ def sikayet_yaz(request):
                 complaint.image = request.FILES.get('image')
             complaint.save()
 
+
             # Resimlerin kaydedileceği dizinin yolu
             save_path = os.path.join(settings.MEDIA_ROOT, 'complaints', str(complaint.id))
 
