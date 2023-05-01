@@ -90,6 +90,7 @@ summary:focus::after {
   top: 0;
   left: 0;
   box-shadow: 0 0 0 5px #ff6f3c;
+    border-radius: 20px;
 }
 
 summary::-webkit-details-marker {
@@ -167,7 +168,7 @@ details[open] .control-icon-expand {
             <nav class="main-menu">
                 <ul class="menu-list">
                     <li><a href="anasayfa">Anasayfa</a></li>
-                    <li><a href="">Şikayetler</a></li>
+                    <li><a href="complaints.html">Şikayetler</a></li>
                     <li><a href="register.html">Giriş Yap / Kayıt Ol</a></li>
                 </ul>
             </nav>
@@ -236,6 +237,26 @@ details[open] .control-icon-expand {
   <p>Şikayetlerinize daha etkin çözümler sunabilmek ve çözüm sağlamak isteyen firmaların size ulaşabilmelerine imkan sağlamak için üye olmanız gerekmektedir.</p>
 </details>
 
+    <details>
+  <summary>
+    Nasıl üye olurum?
+    <svg class="control-icon control-icon-expand" width="24" height="24" role="presentation"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#expand-more" /></svg>
+    <svg class="control-icon control-icon-close" width="24" height="24" role="presentation"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close" /></svg>
+  </summary>
+  <p>Ana sayfamızda yer alan “Üye Ol” sekmesine tıklayınız. Açılan üyelik formunu eksiksiz olarak doldurunuz ve formun altında bulunan “Gönder” düğmesine basınız.
+      Bu işlemden sonra üye olurken kullandığınız email adresine bir aktivasyon bağlantısı gönderilecektir.
+      Bu bağlantının üzerine tıklayarak üyeliğinizi aktif hale getirmeniz gerekmektedir.</p>
+</details>
+
+    <details>
+  <summary>
+    Üyelik ücretli midir?
+    <svg class="control-icon control-icon-expand" width="24" height="24" role="presentation"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#expand-more" /></svg>
+    <svg class="control-icon control-icon-close" width="24" height="24" role="presentation"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close" /></svg>
+  </summary>
+  <p>Çözümburada.com'da tüm bireysel üyelik tipleri ücretsizdir.</p>
+</details>
+
 
 	<!-- Footer section -->
 	<footer class="footer-section" style="margin-top: 100px">
@@ -257,13 +278,9 @@ details[open] .control-icon-expand {
                     {% endfor %}
 				</div>
 				<div class="col-md-6 col-lg-3 footer-widget pl-lg-5 pl-3">
-					<h5 class="widget-title">Çok Arananlar</h5>
+					<h5 class="widget-title">Hızlı Menü</h5>
 					<ul>
-						<li><a href="#">Arananlar 1</a></li>
-						<li><a href="#">Arananlar 2</a></li>
-						<li><a href="#">Arananlar 3</a></li>
-						<li><a href="#">Arananlar 4</a></li>
-						<li><a href="#">Arananlar 5</a></li>
+						<li><a href="#">Sıkça Sorulan Sorular</a></li>
 					</ul>
 				</div>
 			</div>

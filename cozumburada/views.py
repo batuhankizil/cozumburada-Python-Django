@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserChangeForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -29,6 +29,8 @@ def index(request):
     username = None
     user_count = User.objects.filter(is_superuser=False).count()
     complaint = Complaint.objects.all()
+    complaints_sorted = sorted(complaint, key=lambda c: c.complaintDate, reverse=True)
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
     complaint_count = Complaint.objects.count()
     if request.user.is_authenticated:
         username = request.user.username
@@ -36,9 +38,34 @@ def index(request):
         'username': username,
         'user_count': user_count,
         'complaints': complaint,
-        'complaint_count': complaint_count
+        'complaint_count': complaint_count,
+        'complaints_sorted': complaints_sorted,
+        'complaints_footer': complaints_footer,
     }
     return render(request, 'index.html', context)
+
+
+def comment(request, complaint_id):
+    username = None
+    #complaint = Complaint.objects.all()
+    complaint = get_object_or_404(Complaint, id=complaint_id)
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    if request.user.is_authenticated:
+        username = request.user.username
+    context = {
+        'username': username,
+        'complaints': complaint,
+        'complaints_footer': complaints_footer,
+    }
+    return render(request, 'comment.html', context)
+
+
+def sss(request):
+    complaints = Complaint.objects.all()
+    complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    return render(request, 'sss.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
+                                               'complaints_footer': complaints_footer})
 
 
 def is_valid_email(email):
@@ -148,6 +175,24 @@ def activate(request, uidb64, token):
         return render(request, 'Email.html', {'msg': 'Hesap doğrulama bağlantısı artık aktif değil.'})
 
 
+def complaint_delete(request, id):
+    complaint = Complaint.objects.filter(id=id, user=request.user).first()
+    if not complaint:
+        messages.error(request, 'Şikayet bulunamadı.')
+    else:
+        complaint.delete()
+        messages.success(request, 'Şikayetiniz silindi.')
+    return redirect('my-complaints')
+
+
+
+@login_required
+def my_complaints(request):
+    complaints = Complaint.objects.filter(user=request.user).order_by('-complaintDate')
+    complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    return render(request, 'my-complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
+
 
 def sikayet_yaz(request):
     if request.method == 'POST':
@@ -192,11 +237,18 @@ def complaints(request):
     return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
 
 
+
+
 def edit_profile(request):
     if not request.user.is_authenticated:
         return redirect('register_or_login')
 
     if request.user.is_authenticated:
+
+        complaints = Complaint.objects.all()
+        complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
+        complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+
         if request.method == 'POST':
             form = UserUpdateForm(request.POST, instance=request.user)
             formp = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
@@ -227,7 +279,7 @@ def edit_profile(request):
         else:
             form = UserUpdateForm(instance=request.user)
             formp = ProfileForm(instance=request.user.profile)
-        return render(request, 'edit-profile.html', {'form': form, 'formp': formp})
+        return render(request, 'edit-profile.html', {'form': form, 'formp': formp, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
     else:
         return render(request, 'index.html')
 

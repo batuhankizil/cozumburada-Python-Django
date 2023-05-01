@@ -62,7 +62,7 @@
                         {% endif %}
                         <ul class="dropdown-menu">
                           <li><a href="edit-profile.html">Profili Düzenle</a></li>
-                          <li class="no-line"><a href="my-complaints.html">Şikayetlerim</a></li>
+                          <li class="no-line"><a href="logout">Şikayetlerim</a></li>
                           <li><a href="logout">Kaydedilenler</a></li>
                           <li><a href="logout">Çıkış Yap</a></li>
                         </ul>
@@ -86,10 +86,10 @@
 	<!-- Page info section -->
 	<section class="page-info-section">
 		<div class="container">
-			<h2>Şikayetler</h2>
+			<h2>Şikayetlerim</h2>
 			<div class="site-beradcamb">
 				<a href="anasayfa">Anasayfa</a>
-				<span><i class="fa fa-angle-right"></i> Şikayetler</span>
+				<span><i class="fa fa-angle-right"></i> Şikayetlerim </span>
 			</div>
 		</div>
 	</section>
@@ -101,9 +101,17 @@
   <div class="container my-9 py-5">
     <div class="row d-flex justify-content-center">
       <div class="col-md-12 col-lg-12 col-xl-12">
+      {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<!-- Şikayet formu kodları -->
+
         <div class="card">
           <div class="card-body p-4">
-            <h4 class="text-center mb-4 pb-2">Şikayetler</h4>
+            <h4 class="text-center mb-4 pb-2">Şikayetlerim</h4>
 
             <div class="row">
               <div class="col">
@@ -137,7 +145,9 @@
                                 </div>
                             {% endif %}
                         <span class="p-complaint-date">{{ complaint.complaintDate }}</span> <br>
-                        <a href="{% url 'comment' complaint.id %}" class="c-btn">Yorum</a>
+                        {% if complaint.user == request.user %}
+                            <a href="{% url 'complaint_delete' complaint.id %}" class="btn btn-danger">Sil</a>
+                        {% endif %}
                         </div>
                       </div>
                     </div>
@@ -153,18 +163,10 @@
 	<!-- Blog section end -->
 
 
-	<!-- Newsletter section -->
-	<section class="newsletter-section gradient-bg">
-		<div class="container text-white">
-			<div class="row">
-			</div>
-		</div>
-	</section>
-	<!-- Newsletter section end -->
 
 
 	<!-- Footer section -->
-	<footer class="footer-section">
+	<footer class="footer-section" style="margin-top: 100px">
 		<div class="container">
 			<div class="row spad">
 				<div class="col-md-6 col-lg-3 footer-widget">
@@ -185,7 +187,7 @@
 				<div class="col-md-6 col-lg-3 footer-widget pl-lg-5 pl-3">
 					<h5 class="widget-title">Hızlı Menü</h5>
 					<ul>
-						<li><a href="sss.html">Sıkça Sorular Sorular</a></li>
+						<li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
 					</ul>
 				</div>
 			</div>

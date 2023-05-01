@@ -23,6 +23,10 @@ from django.conf.urls.static import static
 
 from cozumburada.views import activate
 
+app_name = 'cozumburada'
+
+
+
 
 #
 # def index(request):
@@ -43,18 +47,28 @@ def complaints(request):
 def test(request):
     return render(request, 'test.html')
 
+def comment(request):
+    return render(request, 'comment.html')
+def sss(request):
+    return render(request, 'sss.html')
+
 
 urlpatterns = [
     path('', views.index, name='anasayfa'),
     path('anasayfa', views.index, name='anasayfa'),
     path('complaint', views.sikayet_yaz, name='complaint'),
     path('complaints.html', views.complaints, name='complaints'),
+    path('sss.html', views.sss, name='sss'),
+    path('my-complaints.html', views.my_complaints, name='my-complaints'),
     path('password-forget.html', password_forget),
     path('test.html', test),
+    path('<int:complaint_id>/comment/',  views.comment, name='comment'),
     path('edit-profile.html', views.edit_profile, name='edit_profile'),
     path('register.html', views.register_or_login, name='register_or_login'),
     path('logout/', views.logoutPage, name='logout'),
     path('activate<uidb64>/<token>/', activate, name='activate'),
+    path('<int:id>/my-complaints.html', views.complaint_delete, name='complaint_delete'),
+
     path('admin/', admin.site.urls),
 
 

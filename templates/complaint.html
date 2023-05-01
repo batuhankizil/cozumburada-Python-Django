@@ -148,6 +148,75 @@
 	display: grid;
 }
 
+.main-menu {
+  display: flex;
+  justify-content: flex-start; /* Menüyü sola hizalama */
+}
+
+.menu-list {
+  display: flex;
+  align-items: center;
+}
+
+.menu-list li {
+  position: relative;
+  list-style: none;
+  margin-left: 20px; /* Öğeler arasındaki boşluğu sağlamak için */
+  float: left; /* Sol tarafta yerleştirme */
+}
+
+.menu-list li a {
+  display: block;
+  padding: 10px;
+  font-size: 30px;
+  color: #333;
+  text-decoration: none;
+    text-transform: capitalize;
+}
+
+
+/* Açılır menü stil */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  display: none;
+  z-index: 1;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.dropdown-menu li {
+  list-style: none;
+  margin: 5px 0;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 5px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-menu li:hover {
+    background-color: #9fcdff;
+}
+
+
+/* Açılır menü görünümü */
+.menu-list li:hover .dropdown-menu {
+  display: block;
+}
+
+.profile-img {
+  border-radius: 50vw;
+}
+
+
+
 	</style>
 </head>
 <body>
@@ -166,7 +235,23 @@
             </div>
         </div>
 		<div class="right-side">
-            <div class="title">{{ user.username }}</div>
+            <nav class="main-menu">
+                <ul class="menu-list">
+                    <li><a href="">
+
+                        {% if request.user.profile.image %}
+                          <img src="{{ request.user.profile.image.url }}" alt="Profil Resmi"  class="profile-img" height="60px">
+                        {% endif %}
+
+                        {{ user.username }}</a>
+                        <ul class="dropdown-menu">
+                          <li><a href="complaints.html">Şikayetler</a></li>
+                          <li class="no-line"><a href="my-complaints.html">Şikayetlerim</a></li>
+                          <li><a href="logout">Çıkış Yap</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
             <div class="content">
                 <form class="comment-form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -189,7 +274,7 @@
                         <input type="text" class="form-control" name="title" id="title" placeholder="Başlık">
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" id="complaint" name="complaint" placeholder="Şikayet" rows="20"></textarea>
+                        <textarea class="form-control" id="complaint" name="complaint" placeholder="Şikayet" rows="40"></textarea>
                     </div>
                     <div class="form-group">
                         <input type="file" class="form-control-file" id="image" name="image" multiple>

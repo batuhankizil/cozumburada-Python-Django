@@ -9,6 +9,16 @@ from django.contrib.auth.models import User
 #         return self.test
 
 
+class Comment(models.Model):
+    user = models.ForeignKey('cozumburada.Complaint', related_name='comments', on_delete=models.CASCADE)
+
+    complaintDate = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=255)
+    complaint = models.TextField()
+
+
+
+
 class Complaint(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='complaints')
     title = models.CharField(max_length=255)
