@@ -30,7 +30,7 @@ def index(request):
     user_count = User.objects.filter(is_superuser=False).count()
     complaint = Complaint.objects.all()
     complaints_sorted = sorted(complaint, key=lambda c: c.complaintDate, reverse=True)
-    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
     complaint_count = Complaint.objects.count()
     if request.user.is_authenticated:
         username = request.user.username
@@ -49,7 +49,7 @@ def comment(request, complaint_id):
     username = None
     #complaint = Complaint.objects.all()
     complaint = get_object_or_404(Complaint, id=complaint_id)
-    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
     if request.user.is_authenticated:
         username = request.user.username
     context = {
@@ -63,7 +63,7 @@ def comment(request, complaint_id):
 def sss(request):
     complaints = Complaint.objects.all()
     complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
-    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
     return render(request, 'sss.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
                                                'complaints_footer': complaints_footer})
 
@@ -191,8 +191,14 @@ def complaint_delete(request, id):
 def my_complaints(request):
     complaints = Complaint.objects.filter(user=request.user).order_by('-complaintDate')
     complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
-    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
-    return render(request, 'my-complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
+    #if complaints:
+    return render(request, 'my-complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
+                                                      'complaints_footer': complaints_footer})
+    # else:
+    #     return render(request, 'my-complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
+    #                                                   'complaints_footer': complaints_footer,
+    #                                                   'no_complaints_message': 'Şikayetiniz bulunamadı. Şikayet Yaz sayfasından şikayetinizi oluşturabilirsiniz.'})
 
 
 def sikayet_yaz(request):
@@ -234,7 +240,7 @@ def sikayet_yaz(request):
 def complaints(request):
     complaints = Complaint.objects.all()
     complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
-    complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+    complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
     return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
 
 
@@ -248,7 +254,7 @@ def edit_profile(request):
 
         complaints = Complaint.objects.all()
         complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
-        complaints_footer = Complaint.objects.order_by('-complaintDate')[:5]
+        complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
 
         if request.method == 'POST':
             form = UserUpdateForm(request.POST, instance=request.user)
