@@ -61,7 +61,7 @@
                         <ul class="dropdown-menu">
                           <li><a href="edit-profile.html">Profili Düzenle</a></li>
                           <li class="no-line"><a href="my-complaints.html">Şikayetlerim</a></li>
-                          <li><a href="logout">Kaydedilenler</a></li>
+                          <li><a href="complaint-fav.html">Kaydedilenler</a></li>
                           <li><a href="logout">Çıkış Yap</a></li>
                         </ul>
                     </li>
@@ -393,21 +393,32 @@
 {##}
 {##}
 	<!-- Review section -->
+
 	<section class="review-section spad">
 		<div class="container">
 			<div class="row">
-				<div class="col-xl-4 push-5">
+				<div class="row push-5" style="width: 100%">
+                <div id="myModal" class="modal">
+                                  <span class="close" onclick="closeModal()">&times;</span>
+                                  <img class="modal-content" id="img01">
+                                </div>
 					<img src="{% static 'img/quote.png' %}" alt="" class="quote mb-5">
+                <h2>Şikayetler</h2>
 					<div class="review-text-slider owl-carousel">
                         {% for complaint in complaints %}
                             <div class="review-item">
                                 <div class="review-profile">
-                                    <img src="{{ complaint.user.profile.image.url }}" alt="Profile Picture" height="200px" width="10px">
+                                    <img src="{{ complaint.user.profile.image.url }}" alt="Profile Picture" style="object-fit: contain; width: 100px; height: 150px;">
                                     <p>{{ complaint.user }}</p>
                                 </div>
                                 <div class="review-text">
                                     <h2>{{ complaint.title }}</h2>
                                     <p>{{ complaint.complaint }}</p>
+                                    {% if complaint.image %}
+                                <img class="zoomable" src="{{ complaint.image.url }}" style="object-fit: contain; width: 100px; height: 150px;" onclick="openModal(this)"> <br>
+
+                            {% endif %}
+                        <span class="p-complaint-date">{{ complaint.complaintDate }}</span> <br>
                                 </div>
                             </div>
                         {% endfor %}
@@ -542,5 +553,22 @@
 	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
+    <script>
+    function openModal(img) {
+      // Modalı göster
+      var modal = document.getElementById("myModal");
+      modal.style.display = "block";
+
+      // Modal içeriğini ayarla
+      var modalImg = document.getElementById("img01");
+      modalImg.src = img.src;
+    }
+
+    function closeModal() {
+      // Modalı gizle
+      var modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    }
+    </script>
 </body>
 </html>

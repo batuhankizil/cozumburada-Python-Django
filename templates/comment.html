@@ -126,6 +126,14 @@
                 {{ complaints.complaint }}
             </p>
 
+              {% if complaints.image %}
+                                <img class="zoomable" src="{{ complaints.image.url }}" height="100px" onclick="openModal(this)"> <br>
+                                <div id="myModal" class="modal">
+                                  <span class="close" onclick="closeModal()">&times;</span>
+                                  <img class="modal-content" id="img01">
+                                </div>
+                            {% endif %}
+
             <div class="small d-flex justify-content-start">
               <a href="#!" class="d-flex align-items-center me-3">
                 <i class="far fa-comment-dots me-2"></i>

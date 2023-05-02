@@ -186,6 +186,7 @@ def complaint_delete(request, id):
 
 
 
+
 @login_required
 def my_complaints(request):
     complaints = Complaint.objects.filter(user=request.user).order_by('-complaintDate')

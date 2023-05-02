@@ -62,12 +62,13 @@ urlpatterns = [
     path('my-complaints.html', views.my_complaints, name='my-complaints'),
     path('password-forget.html', password_forget),
     path('test.html', test),
-    path('<int:complaint_id>/comment/',  views.comment, name='comment'),
+    path('complaints/<int:complaint_id>/comment/',  views.comment, name='comment'),
     path('edit-profile.html', views.edit_profile, name='edit_profile'),
     path('register.html', views.register_or_login, name='register_or_login'),
     path('logout/', views.logoutPage, name='logout'),
     path('activate<uidb64>/<token>/', activate, name='activate'),
     path('<int:id>/my-complaints.html', views.complaint_delete, name='complaint_delete'),
+
 
     path('admin/', admin.site.urls),
 
