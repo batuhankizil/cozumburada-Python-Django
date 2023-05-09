@@ -14,14 +14,13 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-from .forms import ComplaintForm, UserUpdateForm, ProfileForm, SignupForm
+from .forms import ComplaintForm, UserUpdateForm, ProfileForm, SignupForm, CommentForm
 
-from cozumburada.models import Complaint, Profile
+from cozumburada.models import Complaint, Profile, Comment
 
 import re
 
 from .tokens import account_activation_token
-
 
 
 # @login_required(login_url='register_or_login')
@@ -47,8 +46,17 @@ def index(request):
 
 def comment(request, complaint_id):
     username = None
-    #complaint = Complaint.objects.all()
     complaint = get_object_or_404(Complaint, id=complaint_id)
+
+    form = CommentForm(request.POST or None)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.complaint = complaint
+        comment.user = request.user
+        comment.save()
+
+    comments = complaint.comments.all()
+
     complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
     if request.user.is_authenticated:
         username = request.user.username
@@ -56,8 +64,24 @@ def comment(request, complaint_id):
         'username': username,
         'complaints': complaint,
         'complaints_footer': complaints_footer,
+        'form': form,
+        'comments': comments,
     }
     return render(request, 'comment.html', context)
+
+
+def delete_comment(request):
+    comment = None  # define a default value
+    if request.method == 'POST':
+        comment_id = request.POST['comment_id']
+        comment = Comment.objects.get(id=comment_id)
+        if comment.user == request.user:
+            comment.delete()
+    if comment:
+        return redirect('comment', complaint_id=comment.complaint.id)
+
+
+
 
 
 def sss(request):
@@ -65,7 +89,7 @@ def sss(request):
     complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
     complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
     return render(request, 'sss.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
-                                               'complaints_footer': complaints_footer})
+                                        'complaints_footer': complaints_footer})
 
 
 def is_valid_email(email):
@@ -78,7 +102,6 @@ if is_valid_email(email):
     print(f"{email} is a valid email address")
 else:
     print(f"{email} is not a valid email address")
-
 
 
 def register_or_login(request):
@@ -158,7 +181,6 @@ def register_or_login(request):
     return render(request, 'register.html', {'form': form})
 
 
-
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
@@ -170,7 +192,8 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return render(request, 'Email.html', {'msg': 'Email adresinizi doğruladınız. Giriş yaparak şikayet yazmaya başlayabilirsiniz'})
+        return render(request, 'Email.html',
+                      {'msg': 'Email adresinizi doğruladınız. Giriş yaparak şikayet yazmaya başlayabilirsiniz'})
     else:
         return render(request, 'Email.html', {'msg': 'Hesap doğrulama bağlantısı artık aktif değil.'})
 
@@ -185,16 +208,14 @@ def complaint_delete(request, id):
     return redirect('my-complaints')
 
 
-
-
 @login_required
 def my_complaints(request):
     complaints = Complaint.objects.filter(user=request.user).order_by('-complaintDate')
     complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
     complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
-    #if complaints:
+    # if complaints:
     return render(request, 'my-complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
-                                                      'complaints_footer': complaints_footer})
+                                                  'complaints_footer': complaints_footer})
     # else:
     #     return render(request, 'my-complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
     #                                                   'complaints_footer': complaints_footer,
@@ -210,7 +231,6 @@ def sikayet_yaz(request):
             if request.FILES.get('image'):
                 complaint.image = request.FILES.get('image')
             complaint.save()
-
 
             # Resimlerin kaydedileceği dizinin yolu
             save_path = os.path.join(settings.MEDIA_ROOT, 'complaints', str(complaint.id))
@@ -234,16 +254,12 @@ def sikayet_yaz(request):
     return render(request, 'complaint.html', context)
 
 
-
-
-
 def complaints(request):
     complaints = Complaint.objects.all()
     complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
     complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
-    return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
-
-
+    return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
+                                               'complaints_footer': complaints_footer})
 
 
 def edit_profile(request):
@@ -286,7 +302,9 @@ def edit_profile(request):
         else:
             form = UserUpdateForm(instance=request.user)
             formp = ProfileForm(instance=request.user.profile)
-        return render(request, 'edit-profile.html', {'form': form, 'formp': formp, 'complaints_sorted': complaints_sorted, 'complaints_footer': complaints_footer})
+        return render(request, 'edit-profile.html',
+                      {'form': form, 'formp': formp, 'complaints_sorted': complaints_sorted,
+                       'complaints_footer': complaints_footer})
     else:
         return render(request, 'index.html')
 

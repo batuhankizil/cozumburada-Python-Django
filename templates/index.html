@@ -532,10 +532,14 @@
 					<h5 class="widget-title">Şikayetler</h5>
 
                     {% for complaint in complaints_footer %}
+                        <form action="" method="POST">
+                        {% csrf_token %}
                         <ul>
-                            <li><a href="#">{{ complaint.title }}</a></li>
+                            <li><a href="{% url 'comment' complaint.id %}">{{ complaint.title }}</a></li>
                         </ul>
+                        </form>
                     {% endfor %}
+
 				</div>
 				<div class="col-md-6 col-lg-3 footer-widget pl-lg-5 pl-3">
 					<h5 class="widget-title">Hızlı Menü</h5>

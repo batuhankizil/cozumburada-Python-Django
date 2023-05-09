@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Complaint, Profile
+from .models import Complaint, Profile, Comment
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -10,6 +10,15 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Profile, ProfileAdmin)
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'comment']
+
+    class Meta:
+        model = Comment
+
+
+admin.site.register(Comment, CommentAdmin)
 
 
 class ComplaintAdmin(admin.ModelAdmin):

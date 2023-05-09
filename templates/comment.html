@@ -32,9 +32,72 @@
 
     <style>
         .p-comment-user{
-            font-size: 22px;
+            font-size: 23px;
+            color: #ff6f3c;
+            margin-top: 10px;
 
         }
+        .p-comment-user2{
+            font-size: 22px;
+            color: #ff6f3c;
+            margin-bottom: -5px;
+            text-transform: capitalize;
+
+        }
+        .p-comment-title{
+
+	        color: #1b1b1b;
+	        font-weight: bold;
+
+        }
+        .p-comment-complaint{
+            color: #1b1b1b;
+        }
+        .p-comment-date{
+            color: #75849a;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .p-comment-date2{
+            color: #75849a;
+            font-size: 11px;
+        }
+        .g-height-50 {
+    height: 50px;
+}
+
+
+.g-width-50 {
+    width: 60px !important;
+    height: 60px;
+    margin-right: 10px;
+}
+
+@media (min-width: 0){
+    .g-pa-30 {
+        padding: 2.14286rem !important;
+    }
+}
+
+.g-bg-secondary {
+    background-color: #fafafa !important;
+}
+
+.u-shadow-v18 {
+    box-shadow: 0 5px 10px -6px rgba(0, 0, 0, 0.15);
+}
+
+.g-color-gray-dark-v4 {
+    color: #777 !important;
+}
+
+.g-font-size-12 {
+    font-size: 0.85714rem !important;
+}
+
+.media-comment {
+    margin-top:20px
+}
     </style>
 
 </head>
@@ -116,13 +179,13 @@
                 height="60" />
               <div>
                 <h6 class="p-comment-user">{{ complaints.user }}</h6>
-                <p class="text-muted small mb-0">
+                <p class="p-comment-title">
                     {{ complaints.title }}
                 </p>
               </div>
             </div>
 
-            <p class="mt-3 mb-4 pb-2">
+            <p class="p-comment-complaint">
                 {{ complaints.complaint }}
             </p>
 
@@ -136,26 +199,87 @@
 
             <div class="small d-flex justify-content-start">
               <a href="#!" class="d-flex align-items-center me-3">
-                <i class="far fa-comment-dots me-2"></i>
-                <p>{{ complaints.complaintDate}}</p>
+                <p class="p-comment-date">{{ complaints.complaintDate}}</p>
               </a>
             </div>
+
+
+{#          {% for comment in comments %}#}
+{#                <div class="comment">#}
+{#              <img class="rounded-circle shadow-1-strong mr-3"#}
+{#                src="{{ comment.user.profile.image.url }}" alt="avatar" width="60"#}
+{#                height="60" />#}
+{#                    <p>{{ comment.user }}</p>#}
+{#                    <p>{{ comment.comment }}</p>#}
+{#                    <p class="small">Yorum tarihi: {{ comment.commentDate }}</p>#}
+{#                </div>#}
+{#            {% empty %}#}
+{#                <p>Bu şikayete henüz yorum yapılmamış.</p>#}
+{#            {% endfor %}#}
+
+            <div class="container">
+            <div class="row">
+
+                {% for comment in comments %}
+
+                <div class="col-md-11">
+                    <div class="media g-mb-30 media-comment">
+                        <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="{{ comment.user.profile.image.url }}" alt="Image Description">
+                        <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                          <div class="g-mb-15">
+                            <p class="p-comment-user2">{{ comment.user }}</p>
+                            <span class="p-comment-date2">{{ comment.commentDate}}</span>
+                          </div>
+
+                          <p style="margin-top: 12px">{{ comment.comment }}</p>
+
+                          {% if comment.user == request.user %}
+                            <ul class="list-inline d-sm-flex my-0">
+                              <li class="list-inline-item ml-auto">
+                                  <form method="POST" action="{% url 'delete_comment' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                    <button type="submit" class="btn btn-link u-link-v5 g-color-gray-dark-v4 g-color-primary--hover">
+                                        <i class="fa fa-times g-pos-rel g-top-1 g-mr-3"></i>
+                                        Sil
+                                    </button>
+                                </form>
+
+                              </li>
+                            </ul>
+                          {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Bu şikayete henüz yorum yapılmamış.</p>
+                {% endfor %}
+            </div>
+            </div>
+
+
+
           </div>
+            <form action="" method="POST">
+                {% csrf_token %}
           <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
             <div class="d-flex flex-start w-100">
               <img class="rounded-circle shadow-1-strong mr-3"
                 src="{{ user.profile.image.url }}" alt="avatar" width="60"
                 height="60" />
               <div class="form-outline w-100">
-                <textarea class="form-control" id="textAreaExample" rows="4" placeholder="Yorum yap..."
+                <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Yorum yap..."
                   style="background: #fff;"></textarea>
               </div>
             </div>
             <div class="float-end mt-4 pt-3">
-              <button type="button" class="btn btn-primary btn-sm">Yorum yap</button>
-              <button type="button" class="btn btn-outline-primary btn-sm">İptal</button>
+              <button type="submit" class="btn btn-primary btn-sm">Yorum yap</button>
+              <button type="reset" class="btn btn-outline-primary btn-sm">İptal</button>
             </div>
           </div>
+            </form>
+
         </div>
       </div>
     </div>
@@ -188,15 +312,19 @@
 					<h5 class="widget-title">Şikayetler</h5>
 
                     {% for complaint in complaints_footer %}
+                        <form action="" method="POST">
+                        {% csrf_token %}
                         <ul>
-                            <li><a href="#">{{ complaint.title }}</a></li>
+                            <li><a href="{% url 'comment' complaint.id %}">{{ complaint.title }}</a></li>
                         </ul>
+                        </form>
                     {% endfor %}
+
 				</div>
 				<div class="col-md-6 col-lg-3 footer-widget pl-lg-5 pl-3">
 					<h5 class="widget-title">Hızlı Menü</h5>
 					<ul>
-						<li><a href="#">Sıkça Sorulan Sorular</a></li>
+						<li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
 					</ul>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-from .models import Complaint
+from .models import Complaint, Comment
 
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
@@ -12,7 +12,6 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.forms import UserCreationForm
-
 
 
 class SignupForm(UserCreationForm):
@@ -77,10 +76,17 @@ class ComplaintForm(forms.ModelForm):
         return instance
 
 
-
 class ProfileForm(forms.ModelForm):
     image = forms.ImageField(label="Profile Picture")
 
     class Meta:
         model = Profile
         fields = ['image']
+
+
+class CommentForm(forms.ModelForm):
+    comment = forms.CharField(label='Comment')
+
+    class Meta:
+        model = Comment
+        fields = ['comment']

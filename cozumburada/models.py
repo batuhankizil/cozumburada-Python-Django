@@ -9,16 +9,6 @@ from django.contrib.auth.models import User
 #         return self.test
 
 
-class Comment(models.Model):
-    user = models.ForeignKey('cozumburada.Complaint', related_name='comments', on_delete=models.CASCADE)
-
-    complaintDate = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=255)
-    complaint = models.TextField()
-
-
-
-
 class Complaint(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='complaints')
     title = models.CharField(max_length=255)
@@ -27,13 +17,11 @@ class Complaint(models.Model):
 
     image = models.ImageField(upload_to='complaints/', null=True, blank=True)
 
-
     def __str__(self):
         return self.title
 
 
 complaints = Complaint.objects.all()
-
 
 
 class Profile(models.Model):
@@ -42,3 +30,17 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+# class Comment(models.Model):
+#     complaint = models.ForeignKey('cozumburada.Complaint', on_delete=models.CASCADE)
+#     content = models.TextField(verbose_name='Yorum')
+#     created_date = models.DateTimeField(auto_now_add=True)
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='comments')
+    complaint = models.ForeignKey(Complaint, on_delete=models.CASCADE, related_name='comments')
+    comment = models.TextField()
+    commentDate = models.DateTimeField(auto_now_add=True)
+
+comments = Comment.objects.all()

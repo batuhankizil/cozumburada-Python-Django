@@ -73,6 +73,7 @@ p {
 }
 
 .p-complaint-user {
+	font-size: 20px;
 	color: #FF6F3C;
 	text-transform: capitalize;
 	margin-top: 10px;
