@@ -93,9 +93,10 @@
 {#                        </label>#}
 {#                        <button class="site-btn sb-gradients">Ara</button>#}
 {#					</form>#}
-                    <form class="newsletter-form">
-                            <input type="text" placeholder="Marka, model, ürün">
-                        <button class="site-btn sb-gradients">Ara</button>
+                    <form class="newsletter-form" method="GET" action="{% url 'search_complaints' %}">
+
+                            <input type="text" placeholder="Marka, model, ürün" name="q">
+                        <button  type="submit" class="site-btn sb-gradients">Ara</button>
 					</form>
 				</div>
 				<div class="col-md-6">

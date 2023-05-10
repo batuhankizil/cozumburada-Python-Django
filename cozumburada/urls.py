@@ -69,6 +69,7 @@ urlpatterns = [
     path('activate<uidb64>/<token>/', activate, name='activate'),
     path('<int:id>/my-complaints.html', views.complaint_delete, name='complaint_delete'),
     path('comment/delete/', views.delete_comment, name='delete_comment'),
+    path('search', views.search_complaints, name='search_complaints'),
 
     path('admin/', admin.site.urls),
 

@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserChangeForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -79,9 +81,6 @@ def delete_comment(request):
             comment.delete()
     if comment:
         return redirect('comment', complaint_id=comment.complaint.id)
-
-
-
 
 
 def sss(request):
@@ -225,6 +224,10 @@ def my_complaints(request):
 def sikayet_yaz(request):
     if request.method == 'POST':
         form = ComplaintForm(request.POST, user=request.user)
+
+        title = request.POST.get('title')
+        complaint = request.POST.get('complaint')
+
         if form.is_valid():
             complaint = form.save()
 
@@ -232,19 +235,23 @@ def sikayet_yaz(request):
                 complaint.image = request.FILES.get('image')
             complaint.save()
 
-            # Resimlerin kaydedileceği dizinin yolu
             save_path = os.path.join(settings.MEDIA_ROOT, 'complaints', str(complaint.id))
 
-            # Resimlerin kaydedileceği dizini oluştur
             os.makedirs(save_path, exist_ok=True)
 
-            # Formdan gelen resimleri tek tek kaydet
             for image in request.FILES.getlist('image'):
                 fs = FileSystemStorage(location=save_path)
                 filename = fs.save(image.name, image)
 
             messages.success(request, 'Şikayetiniz alınmıştır. En kısa sürede incelenecektir.')
             return redirect('complaint')
+
+        else:
+            # eğer form geçersizse, form alanlarının içeriğindeki hataları göster
+            if not title:
+                messages.error(request, 'Başlık boş olamaz')
+            if not complaint:
+                messages.error(request, 'Şikayet alanı boş olamaz')
     else:
         form = ComplaintForm(user=request.user)
 
@@ -255,11 +262,56 @@ def sikayet_yaz(request):
 
 
 def complaints(request):
-    complaints = Complaint.objects.all()
-    complaints_sorted = sorted(complaints, key=lambda c: c.complaintDate, reverse=True)
+    complaints = Complaint.objects.order_by('-complaintDate')
+    paginator = Paginator(complaints, 3)
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
+
+    complaints_sorted = sorted(contacts, key=lambda c: c.complaintDate, reverse=True)
     complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
+
     return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
-                                               'complaints_footer': complaints_footer})
+                                               'complaints_footer': complaints_footer, 'contacts': contacts})
+
+
+def search_complaints(request):
+    query = request.GET.get('q')
+    if query:
+        complaint_list = Complaint.objects.filter(Q(title__icontains=query) | Q(complaint__icontains=query))
+        if not complaint_list:
+            context = {
+                'contacts': complaint_list,
+                'message': 'Aradığınız marka, model veya ürün ile alakalı şikayet bulunamadı.'
+            }
+        else:
+            paginator = Paginator(complaint_list, 3)  # her sayfada 10 şikayet gösterilecek
+            page = request.GET.get('page')
+            contacts = paginator.get_page(page)
+            context = {
+                'contacts': contacts
+            }
+    else:
+        complaint_list = Complaint.objects.all().order_by('-complaintDate')
+        paginator = Paginator(complaint_list, 3)  # her sayfada 10 şikayet gösterilecek
+        page = request.GET.get('page')
+        contacts = paginator.get_page(page)
+        context = {
+            'contacts': contacts
+        }
+
+    return render(request, 'complaints.html', context)
+
+
+
+
+
+
+
 
 
 def edit_profile(request):
