@@ -18,7 +18,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from .forms import ComplaintForm, UserUpdateForm, ProfileForm, SignupForm, CommentForm
 
-from cozumburada.models import Complaint, Profile, Comment
+from cozumburada.models import Complaint, Profile, Comment, ComplaintFavorite
 
 import re
 
@@ -289,7 +289,7 @@ def search_complaints(request):
                 'message': 'Aradığınız marka, model veya ürün ile alakalı şikayet bulunamadı.'
             }
         else:
-            paginator = Paginator(complaint_list, 3)  # her sayfada 10 şikayet gösterilecek
+            paginator = Paginator(complaint_list, 10)
             page = request.GET.get('page')
             contacts = paginator.get_page(page)
             context = {
@@ -297,7 +297,7 @@ def search_complaints(request):
             }
     else:
         complaint_list = Complaint.objects.all().order_by('-complaintDate')
-        paginator = Paginator(complaint_list, 3)  # her sayfada 10 şikayet gösterilecek
+        paginator = Paginator(complaint_list, 10)
         page = request.GET.get('page')
         contacts = paginator.get_page(page)
         context = {
@@ -307,8 +307,29 @@ def search_complaints(request):
     return render(request, 'complaints.html', context)
 
 
+def add_to_favorites(request, complaint_id):
+    complaint = Complaint.objects.get(id=complaint_id)
+    favorite = ComplaintFavorite(
+        user=request.user,
+        complaint=complaint,
+        complaint_title=complaint.complaint,
+    )
+    favorite.save()
+    return redirect('fav_list')
 
 
+@login_required
+def favorite_list(request):
+    favorites = ComplaintFavorite.objects.filter(user=request.user)
+    return render(request, 'complaint-fav.html', {'favorites': favorites})
+
+
+def remove_from_favorites(request, complaint_id):
+    complaint = Complaint.objects.get(id=complaint_id)
+    favorite = ComplaintFavorite.objects.filter(user=request.user, complaint=complaint).first()
+    if favorite:
+        favorite.delete()
+    return redirect('fav_list')
 
 
 

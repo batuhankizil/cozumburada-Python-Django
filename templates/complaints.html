@@ -65,7 +65,7 @@
                         <ul class="dropdown-menu">
                           <li><a href="edit-profile.html">Profili Düzenle</a></li>
                           <li class="no-line"><a href="my-complaints.html">Şikayetlerim</a></li>
-                          <li><a href="logout">Kaydedilenler</a></li>
+                          <li><a href="favoriler">Kaydedilenler</a></li>
                           <li><a href="logout">Çıkış Yap</a></li>
                         </ul>
                     </li>
@@ -144,6 +144,8 @@
                         <span class="p-complaint-date">{{ complaint.complaintDate }}</span> <br>
                         <i class="fa fa-comment-o" style="color: #155263"></i>
                         <a href="{% url 'comment' complaint.id %}" class="c-btn" style="color: #155263">Yorum</a>
+                        <a href="{% url 'add_to_favorites' complaint.id %}" class="btn btn-primary">Favorilere Ekle</a>
+
                             <hr>
                         </div>
                       </div>

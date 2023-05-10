@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models, migrations
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -16,6 +17,9 @@ class Complaint(models.Model):
     complaintDate = models.DateTimeField(auto_now_add=True)
 
     image = models.ImageField(upload_to='complaints/', null=True, blank=True)
+    favorites = models.ManyToManyField(User, related_name='favorite_complaints', blank=True)
+
+
 
     def __str__(self):
         return self.title
@@ -44,3 +48,12 @@ class Comment(models.Model):
     commentDate = models.DateTimeField(auto_now_add=True)
 
 comments = Comment.objects.all()
+
+
+
+class ComplaintFavorite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    complaint = models.ForeignKey(Complaint, on_delete=models.CASCADE)
+    complaint_title = models.TextField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+

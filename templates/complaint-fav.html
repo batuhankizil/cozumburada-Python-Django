@@ -24,75 +24,6 @@
 	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}"/>
 	<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 
-    <style>
-        body {
-  font-family: "IBM Plex Sans", sans-serif;
-  background-color: rgba(0,0,0,.1);
-}
-
-.cardSlider .wrapper {
-    position: relative;
-}
-
-.cards_container {
-    box-sizing: border-box;
-    width: 80%;
-    height: 300px;
-    margin: 0 auto;
-    background: #ececec;
-}
-
-.cards_container .item {
-    height: 300px;
-    display:none;
-}
-.cards_container .item.active {
-    display: block;
-    padding: 20px;
-}
-
-/* BTNS */
-
-.action_btns {
-    position: absolute;
-    top: 99px;
-    width: 100%;
-}
-
-.action_btns .btn {
-    width: 50px;
-    height: 50px;
-    padding: 0px;
-    font-size: 50px;
-    color: #0275d8;
-}
-
-.action_btns .btn.btn_prev {
-    float: left;
-}
-
-.action_btns .btn.btn_next {
-    float: right;
-}
-
-/* COUNTER */
-
-.count_slide {
-    width: 139px;
-    background: #0275d8;
-    color: #fff;
-    text-align: center;
-    padding: 5px;
-    margin-top: 5px;
-    float: right;
-}
-
-.count_slide span{
-    font-weight: bold;
-}
-    </style>
-
-
 
 
 	<!--[if lt IE 9]>
@@ -156,10 +87,10 @@
 	<!-- Page info section -->
 	<section class="page-info-section">
 		<div class="container">
-			<h3>Sıkça Sorulan Sorular</h3>
+			<h3>Kaydedilenler</h3>
 			<div class="site-beradcamb">
 				<a href="anasayfa">Anasayfa</a>
-				<span><i class="fa fa-angle-right"></i> Sıkça Sorulan Sorular </span>
+				<span><i class="fa fa-angle-right"></i> Kaydedilenler </span>
 			</div>
 		</div>
 	</section>
@@ -167,63 +98,74 @@
 
 
 	<!-- Blog section -->
-    <h2>Çözüm Burada</h2>
 
-<div class="container">
-            <div class="cardSlider">
-                <div class="wrapper">
-                    <div class="action_btns">
-                        <div class="btn btn_prev fa fa-arrow-circle-left"></div>
-                        <div class="btn btn_next fa fa-arrow-circle-right"></div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+          <div class="card-body p-4">
+            <h4 class="text-center mb-4 pb-2">Şikayetler</h4>
+            <div class="row">
+              <div class="col">
+              {% if favorites %}
+                  {% for complaint in favorites %}
+                    <div class="d-flex flex-start">
+                      <img class="rounded-circle shadow-1-strong mr-4"
+                        src="{{ complaint.complaint.user.profile.image.url }}" width="80"
+                        height="80" />
+                      <div class="flex-grow-1 flex-shrink-1">
+                        <div>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="p-complaint-user">
+                              {{ complaint.complaint.user }}
+                            </p>
+                          </div>
+
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="p-complaint-title">
+                              {{ complaint.complaint.title }}
+                            </p>
+                          </div>
+
+                          <p class="p-complaint">
+                            {{ complaint.complaint.complaint }}
+                          </p>
+                            {% if complaint.complaint.image %}
+                                <img class="zoomable" src="{{ complaint.complaint.image.url }}" height="100px" onclick="openModal(this)"> <br>
+                                <div id="myModal" class="modal">
+                                  <span class="close" onclick="closeModal()">&times;</span>
+                                  <img class="modal-content" id="img01">
+                                </div>
+                            {% endif %}
+                        <span class="p-complaint-date">{{ complaint.complaint.complaintDate }}</span> <br>
+
+                        <a href="{% url 'remove_favorite' complaint.complaint.id %}" onclick="event.preventDefault(); document.getElementById('remove-favorite-form-{{ complaint.id }}').submit();">
+                            Favorilerden Kaldır
+                        </a>
+                        <form id="remove-favorite-form-{{ complaint.id }}" action="{% url 'remove_favorite' complaint.complaint.id %}" method="POST" style="display: none;">
+                            {% csrf_token %}
+                            <input type="hidden" name="favorite_id" value="{{ complaint.id }}">
+                        </form>
+
+
+                            <hr>
+                        </div>
+                      </div>
                     </div>
-                    <div class="cards_container">
-                        <div class="item active" data-id="1">
-                            <h1>Francis Grider</h1>
-                            <hr/>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <img src="http://lorempixel.com/150/150/people/">
-                                </div>
-                                <div class="col-sm-9">
-                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-                                </div>
-                            </div>
-                        </div>
+                  {% endfor %}
 
-                        <div class="item" data-id="2">
-                            <h1>Tom Rebeck</h1>
-                            <hr/>
-                            <div class="row">
-                                <div class="col-sm-3" >
-                                    <img src="http://lorempixel.com/150/150/sports/">
-                                </div>
-                                <div class="col-sm-9">
-                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                                </div>
-                            </div>
-                        </div>
+                {% else %}
+                <p>Favorilere henüz şikayet eklenmemiş.</p>
+            {% endif %}
 
-                        <div class="item" data-id="3">
-                            <h1>Michael Roostock</h1>
-                            <hr/>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <img src="http://lorempixel.com/150/150/cats/">
-                                </div>
-                                <div class="col-sm-9">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="count_slide">
-                            Profile <span class="current_slide">1</span> of <span class="total_slides">x</span>
-                        </div>
-
-                    </div>
-                </div>
             </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+
+
 
 
 	<!-- Footer section -->

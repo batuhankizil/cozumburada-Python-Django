@@ -71,6 +71,11 @@ urlpatterns = [
     path('comment/delete/', views.delete_comment, name='delete_comment'),
     path('search', views.search_complaints, name='search_complaints'),
 
+    path('favoriler', views.favorite_list, name='fav_list'),
+    path('add-to-favorites/<int:complaint_id>/', views.add_to_favorites, name='add_to_favorites'),
+    path('remove_favorite/<int:complaint_id>/', views.remove_from_favorites, name='remove_favorite'),
+
+
     path('admin/', admin.site.urls),
 
 
