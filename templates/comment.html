@@ -239,8 +239,8 @@
                                   <form method="POST" action="{% url 'delete_comment' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                                    <button type="submit" class="btn btn-link u-link-v5 g-color-gray-dark-v4 g-color-primary--hover">
-                                        <i class="fa fa-times g-pos-rel g-top-1 g-mr-3"></i>
+                                    <button type="submit" class="btn btn-outline-danger u-link-v5 g-color-gray-dark-v4 g-color-primary--hover">
+                                        <i class="fa fa-trash-o g-pos-rel g-top-1 g-mr-3"></i>
                                         Sil
                                     </button>
                                 </form>

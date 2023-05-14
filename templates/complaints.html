@@ -142,9 +142,15 @@
                                 </div>
                             {% endif %}
                         <span class="p-complaint-date">{{ complaint.complaintDate }}</span> <br>
-                        <i class="fa fa-comment-o" style="color: #155263"></i>
-                        <a href="{% url 'comment' complaint.id %}" class="c-btn" style="color: #155263">Yorum</a>
-                        <a href="{% url 'add_to_favorites' complaint.id %}" class="btn btn-primary">Favorilere Ekle</a>
+
+                        {% if message %}
+                            <div class="alert alert-success">{{ message }}</div>
+                        {% endif %}
+
+                        <i class="fa fa-comment-o mr-1" style="color: #155263"></i>
+                        <a href="{% url 'comment' complaint.id %}" class="c-btn mr-4" style="color: #155263">Yorum</a>
+                        <i class="fa fa-bookmark-o mr-1" style="color: #155263"></i>
+                        <a href="{% url 'add_to_favorites' complaint.id %}" class="c-btn" style="color: #155263" name="add_to_favorites">Favorilere Ekle</a>
 
                             <hr>
                         </div>
@@ -243,7 +249,13 @@
       var modal = document.getElementById("myModal");
       modal.style.display = "none";
     }
-    </script>
+
+
+
+
+</script>
+
+
 
 
 

@@ -309,13 +309,20 @@ def search_complaints(request):
 
 def add_to_favorites(request, complaint_id):
     complaint = Complaint.objects.get(id=complaint_id)
-    favorite = ComplaintFavorite(
-        user=request.user,
-        complaint=complaint,
-        complaint_title=complaint.complaint,
-    )
-    favorite.save()
-    return redirect('fav_list')
+    try:
+        favorite = ComplaintFavorite.objects.get(user=request.user, complaint=complaint)
+        favorite.delete()
+    except ComplaintFavorite.DoesNotExist:
+        favorite = ComplaintFavorite(
+            user=request.user,
+            complaint=complaint,
+            complaint_title=complaint.complaint,
+        )
+        favorite.save()
+    if request.POST.get('add_to_favorites'):
+        return redirect('remove_from_favorites', complaint_id=complaint_id)
+    else:
+        return redirect('fav_list')
 
 
 @login_required

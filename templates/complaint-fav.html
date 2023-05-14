@@ -99,12 +99,12 @@
 
 	<!-- Blog section -->
 
-
+<section class="gradient-custom">
+  <div class="container my-9 py-5">
     <div class="row d-flex justify-content-center">
       <div class="col-md-12 col-lg-12 col-xl-12">
         <div class="card">
           <div class="card-body p-4">
-            <h4 class="text-center mb-4 pb-2">Şikayetler</h4>
             <div class="row">
               <div class="col">
               {% if favorites %}
@@ -123,7 +123,9 @@
 
                           <div class="d-flex justify-content-between align-items-center">
                             <p class="p-complaint-title">
-                              {{ complaint.complaint.title }}
+
+                             <a href="{% url 'comment' complaint.complaint.id %}" class="c-btn mr-4" style="color: #155263">{{ complaint.complaint.title }}</a>
+
                             </p>
                           </div>
 
@@ -164,12 +166,20 @@
       </div>
     </div>
   </div>
+  </div>
+</section>
 
+    <section class="newsletter-section gradient-bg">
+		<div class="container text-white">
+			<div class="row">
+			</div>
+		</div>
+	</section>
 
 
 
 	<!-- Footer section -->
-	<footer class="footer-section" style="margin-top: 100px">
+	<footer class="footer-section">
 		<div class="container">
 			<div class="row spad">
 				<div class="col-md-6 col-lg-3 footer-widget">
@@ -182,19 +192,19 @@
 					<h5 class="widget-title">Şikayetler</h5>
 
                     {% for complaint in complaints_footer %}
+                        <form action="" method="POST">
+                        {% csrf_token %}
                         <ul>
-                            <li><a href="#">{{ complaint.title }}</a></li>
+                            <li><a href="{% url 'comment' complaint.id %}">{{ complaint.title }}</a></li>
                         </ul>
+                        </form>
                     {% endfor %}
+
 				</div>
 				<div class="col-md-6 col-lg-3 footer-widget pl-lg-5 pl-3">
-					<h5 class="widget-title">Çok Arananlar</h5>
+					<h5 class="widget-title">Hızlı Menü</h5>
 					<ul>
-						<li><a href="#">Arananlar 1</a></li>
-						<li><a href="#">Arananlar 2</a></li>
-						<li><a href="#">Arananlar 3</a></li>
-						<li><a href="#">Arananlar 4</a></li>
-						<li><a href="#">Arananlar 5</a></li>
+						<li><a href="sss.html">Sıkça Sorular Sorular</a></li>
 					</ul>
 				</div>
 			</div>
