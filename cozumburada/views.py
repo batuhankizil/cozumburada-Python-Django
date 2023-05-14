@@ -312,6 +312,8 @@ def add_to_favorites(request, complaint_id):
     try:
         favorite = ComplaintFavorite.objects.get(user=request.user, complaint=complaint)
         favorite.delete()
+
+        messages.error(request, 'Şikayet kaldırıldı.')
     except ComplaintFavorite.DoesNotExist:
         favorite = ComplaintFavorite(
             user=request.user,
@@ -319,10 +321,11 @@ def add_to_favorites(request, complaint_id):
             complaint_title=complaint.complaint,
         )
         favorite.save()
-    if request.POST.get('add_to_favorites'):
-        return redirect('remove_from_favorites', complaint_id=complaint_id)
+
+        messages.success(request, 'Şikayet kaydedildi.')
+        return redirect('complaints.html', complaint_id=complaint_id)
     else:
-        return redirect('fav_list')
+        return redirect('complaints')
 
 
 @login_required
