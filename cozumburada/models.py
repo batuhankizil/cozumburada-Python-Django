@@ -19,8 +19,6 @@ class Complaint(models.Model):
     image = models.ImageField(upload_to='complaints/', null=True, blank=True)
     favorites = models.ManyToManyField(User, related_name='favorite_complaints', blank=True)
 
-
-
     def __str__(self):
         return self.title
 
@@ -31,6 +29,7 @@ complaints = Complaint.objects.all()
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/', default='default.png', null=True, blank=True)
+    verified = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return self.user.username
@@ -47,8 +46,8 @@ class Comment(models.Model):
     comment = models.TextField()
     commentDate = models.DateTimeField(auto_now_add=True)
 
-comments = Comment.objects.all()
 
+comments = Comment.objects.all()
 
 
 class ComplaintFavorite(models.Model):
@@ -56,4 +55,3 @@ class ComplaintFavorite(models.Model):
     complaint = models.ForeignKey(Complaint, on_delete=models.CASCADE)
     complaint_title = models.TextField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-

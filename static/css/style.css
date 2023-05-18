@@ -421,7 +421,7 @@ ol {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border: 1px solid #ccc;
+    border: 1px solid #F2F2F2;
     position: absolute;
     left: -50px; /* veya istediğiniz herhangi bir değer */
     top: 50%; /* veya istediğiniz herhangi bir değer */
@@ -429,6 +429,21 @@ ol {
 	margin-left: 20px;
 
 }
+
+.pagination .page-item.active .page-link {
+	background: -webkit-gradient(linear, left top, right top, from(#ff6f3c), color-stop(100%, #FF9A3C), color-stop(100%, #FF9A3C), to(#ff9a3c));
+	background: -o-linear-gradient(left, #ff6f3c 0%, #FF9A3C 100%, #FF9A3C 100%, #ff9a3c 100%);
+	background: linear-gradient(to right, #ff6f3c 0%, #FF9A3C 100%, #FF9A3C 100%, #ff9a3c 100%);
+    border-color: orange;
+	color: #fff3cd;
+  }
+
+ .pagination .page-item .page-link {
+    color: #0c5460;
+  }
+
+
+
 
 .menu-list {
 	list-style: none;

@@ -28,6 +28,7 @@ from .tokens import account_activation_token
 # @login_required(login_url='register_or_login')
 def index(request):
     username = None
+    is_verified = request.user.profile.verified if hasattr(request.user, 'profile') else False
     user_count = User.objects.filter(is_superuser=False).count()
     complaint = Complaint.objects.all()
     complaints_sorted = sorted(complaint, key=lambda c: c.complaintDate, reverse=True)
@@ -42,12 +43,14 @@ def index(request):
         'complaint_count': complaint_count,
         'complaints_sorted': complaints_sorted,
         'complaints_footer': complaints_footer,
+        'is_verified': is_verified,
     }
     return render(request, 'index.html', context)
 
 
 def comment(request, complaint_id):
     username = None
+    is_verified = request.user.profile.verified if hasattr(request.user, 'profile') else False
     complaint = get_object_or_404(Complaint, id=complaint_id)
 
     form = CommentForm(request.POST or None)
@@ -68,6 +71,7 @@ def comment(request, complaint_id):
         'complaints_footer': complaints_footer,
         'form': form,
         'comments': comments,
+        'is_verified': is_verified,
     }
     return render(request, 'comment.html', context)
 
@@ -169,12 +173,11 @@ def register_or_login(request):
                 login(request, user)
                 return redirect('anasayfa')
 
-            if user is not activate:
-                messages.error(request, 'Emailinizi doğrulayın.', extra_tags='danger')
-
+            if not User.is_active:
+                messages.error(request, 'E-posta adresinizi doğrulayın.', extra_tags='danger')
             else:
                 messages.error(request, 'Hatalı kullanıcı adı veya şifre.', extra_tags='danger')
-                pass
+
     else:
         form = SignupForm()
     return render(request, 'register.html', {'form': form})
@@ -262,6 +265,7 @@ def sikayet_yaz(request):
 
 
 def complaints(request):
+    is_verified = request.user.profile.verified if hasattr(request.user, 'profile') else False
     complaints = Complaint.objects.order_by('-complaintDate')
     paginator = Paginator(complaints, 3)
     page = request.GET.get('page')
@@ -276,7 +280,7 @@ def complaints(request):
     complaints_footer = Complaint.objects.order_by('-complaintDate')[:3]
 
     return render(request, 'complaints.html', {'complaints': complaints, 'complaints_sorted': complaints_sorted,
-                                               'complaints_footer': complaints_footer, 'contacts': contacts})
+                                               'complaints_footer': complaints_footer, 'contacts': contacts, 'is_verified': is_verified})
 
 
 def search_complaints(request):
@@ -323,7 +327,7 @@ def add_to_favorites(request, complaint_id):
         favorite.save()
 
         messages.success(request, 'Şikayet kaydedildi.')
-        return redirect('complaints.html', complaint_id=complaint_id)
+        return redirect('complaints')
     else:
         return redirect('complaints')
 

@@ -225,9 +225,15 @@
                 <div class="col-md-11">
                     <div class="media g-mb-30 media-comment">
                         <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="{{ comment.user.profile.image.url }}" alt="Image Description">
-                        <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+
+
+                        <div class="media-body u-shadow-v18 g-pa-30" {% if comment.user.profile.verified %}style="background-color: #F9F5EB" {% else %} style="background-color: #F1F1F1 " {% endif %}>
                           <div class="g-mb-15">
-                            <p class="p-comment-user2">{{ comment.user }}</p>
+                            <p class="p-comment-user2">{{ comment.user }}
+                            {% if comment.user.profile.verified %}
+                              <img src="/static/img/verified.png" alt="Onaylı" width="25" height="25">
+                            {% endif %}
+                            </p>
                             <span class="p-comment-date2">{{ comment.commentDate}}</span>
                           </div>
 
@@ -248,8 +254,9 @@
                               </li>
                             </ul>
                           {% endif %}
-
                         </div>
+
+
                     </div>
                 </div>
                 {% empty %}

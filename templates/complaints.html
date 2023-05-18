@@ -58,7 +58,10 @@
                 <ul class="menu-list">
                     <li><a href="anasayfa">Anasayfa</a></li>
                     <li><a href="complaints.html">Şikayetler</a></li>
-                    <li><a href="">{{ user.username }}</a>
+                    <li><a href="">{{ user.username }}
+                    {% if is_verified %}
+                              <img src="/static/img/verified.png" alt="Onaylı" width="25" height="25">
+                            {% endif %}</a>
                         {% if request.user.profile.image %}
                           <img src="{{ request.user.profile.image.url }}" alt="Profil Resmi" class="profile-img">
                         {% endif %}
@@ -169,21 +172,38 @@
                       </div>
                     </div>
                   {% endfor %}
-              <div class="pagination">
-                    <span class="step-links">
-                        {% if contacts.has_previous %}
-                            <a href="?page={{ contacts.previous_page_number }}">Geri</a>
-                        {% endif %}
 
-                        <span class="current">
-                            Sayfa {{ contacts.number }} / {{ contacts.paginator.num_pages }}.
-                        </span>
 
-                        {% if contacts.has_next %}
-                            <a href="?page={{ contacts.next_page_number }}">İleri</a>
-                        {% endif %}
-                    </span>
-                </div>
+              <nav aria-label="Page navigation example"><br>
+                  <ul class="pagination justify-content-center">
+                    {% if contacts.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ contacts.previous_page_number }}"> << </a>
+                      </li>
+                    {% else %}
+                      <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true"> < </a>
+                      </li>
+                    {% endif %}
+
+                    {% for page_number in contacts.paginator.page_range %}
+                      <li class="page-item {% if contacts.number == page_number %}active{% endif %}">
+                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                      </li>
+                    {% endfor %}
+
+                    {% if contacts.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ contacts.next_page_number }}"> >> </a>
+                      </li>
+                    {% else %}
+                      <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true"> > </a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+
 
             </div>
           </div>
